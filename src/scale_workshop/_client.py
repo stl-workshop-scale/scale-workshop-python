@@ -47,7 +47,6 @@ __all__ = [
 
 class ScaleWorkshop(SyncAPIClient):
     evaluation_datasets: resources.EvaluationDatasetsResource
-    evaluation_datasets_test_cases: resources.EvaluationDatasetsTestCasesResource
     with_raw_response: ScaleWorkshopWithRawResponse
     with_streaming_response: ScaleWorkshopWithStreamedResponse
 
@@ -106,7 +105,6 @@ class ScaleWorkshop(SyncAPIClient):
         )
 
         self.evaluation_datasets = resources.EvaluationDatasetsResource(self)
-        self.evaluation_datasets_test_cases = resources.EvaluationDatasetsTestCasesResource(self)
         self.with_raw_response = ScaleWorkshopWithRawResponse(self)
         self.with_streaming_response = ScaleWorkshopWithStreamedResponse(self)
 
@@ -114,6 +112,12 @@ class ScaleWorkshop(SyncAPIClient):
     @override
     def qs(self) -> Querystring:
         return Querystring(array_format="comma")
+
+    @property
+    @override
+    def auth_headers(self) -> dict[str, str]:
+        api_key = self.api_key
+        return {"Authorization": f"Bearer {api_key}"}
 
     @property
     @override
@@ -211,7 +215,6 @@ class ScaleWorkshop(SyncAPIClient):
 
 class AsyncScaleWorkshop(AsyncAPIClient):
     evaluation_datasets: resources.AsyncEvaluationDatasetsResource
-    evaluation_datasets_test_cases: resources.AsyncEvaluationDatasetsTestCasesResource
     with_raw_response: AsyncScaleWorkshopWithRawResponse
     with_streaming_response: AsyncScaleWorkshopWithStreamedResponse
 
@@ -270,7 +273,6 @@ class AsyncScaleWorkshop(AsyncAPIClient):
         )
 
         self.evaluation_datasets = resources.AsyncEvaluationDatasetsResource(self)
-        self.evaluation_datasets_test_cases = resources.AsyncEvaluationDatasetsTestCasesResource(self)
         self.with_raw_response = AsyncScaleWorkshopWithRawResponse(self)
         self.with_streaming_response = AsyncScaleWorkshopWithStreamedResponse(self)
 
@@ -278,6 +280,12 @@ class AsyncScaleWorkshop(AsyncAPIClient):
     @override
     def qs(self) -> Querystring:
         return Querystring(array_format="comma")
+
+    @property
+    @override
+    def auth_headers(self) -> dict[str, str]:
+        api_key = self.api_key
+        return {"Authorization": f"Bearer {api_key}"}
 
     @property
     @override
@@ -376,34 +384,22 @@ class AsyncScaleWorkshop(AsyncAPIClient):
 class ScaleWorkshopWithRawResponse:
     def __init__(self, client: ScaleWorkshop) -> None:
         self.evaluation_datasets = resources.EvaluationDatasetsResourceWithRawResponse(client.evaluation_datasets)
-        self.evaluation_datasets_test_cases = resources.EvaluationDatasetsTestCasesResourceWithRawResponse(
-            client.evaluation_datasets_test_cases
-        )
 
 
 class AsyncScaleWorkshopWithRawResponse:
     def __init__(self, client: AsyncScaleWorkshop) -> None:
         self.evaluation_datasets = resources.AsyncEvaluationDatasetsResourceWithRawResponse(client.evaluation_datasets)
-        self.evaluation_datasets_test_cases = resources.AsyncEvaluationDatasetsTestCasesResourceWithRawResponse(
-            client.evaluation_datasets_test_cases
-        )
 
 
 class ScaleWorkshopWithStreamedResponse:
     def __init__(self, client: ScaleWorkshop) -> None:
         self.evaluation_datasets = resources.EvaluationDatasetsResourceWithStreamingResponse(client.evaluation_datasets)
-        self.evaluation_datasets_test_cases = resources.EvaluationDatasetsTestCasesResourceWithStreamingResponse(
-            client.evaluation_datasets_test_cases
-        )
 
 
 class AsyncScaleWorkshopWithStreamedResponse:
     def __init__(self, client: AsyncScaleWorkshop) -> None:
         self.evaluation_datasets = resources.AsyncEvaluationDatasetsResourceWithStreamingResponse(
             client.evaluation_datasets
-        )
-        self.evaluation_datasets_test_cases = resources.AsyncEvaluationDatasetsTestCasesResourceWithStreamingResponse(
-            client.evaluation_datasets_test_cases
         )
 
 
