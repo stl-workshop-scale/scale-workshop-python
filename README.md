@@ -27,42 +27,51 @@ pip install git+ssh://git@github.com/stl-workshop-scale/scale-workshop-python.gi
 The full API of this library can be found in [api.md](api.md).
 
 ```python
+import os
 from scale_workshop import ScaleWorkshop
 
 client = ScaleWorkshop(
-    api_key="My API Key",
+    # This is the default and can be omitted
+    api_key=os.environ.get("AWESOME_COMPANY_API_KEY"),
 )
 
-evaluation_dataset_response_schema = client.evaluation_datasets.create(
+evaluation_dataset = client.evaluation_datasets.create(
     account_id="account_id",
     name="name",
     schema_type="GENERATION",
     type="manual",
 )
-print(evaluation_dataset_response_schema.id)
+print(evaluation_dataset.id)
 ```
+
+While you can provide an `api_key` keyword argument,
+we recommend using [python-dotenv](https://pypi.org/project/python-dotenv/)
+to add `AWESOME_COMPANY_API_KEY="My API Key"` to your `.env` file
+so that your API Key is not stored in source control.
 
 ## Async usage
 
 Simply import `AsyncScaleWorkshop` instead of `ScaleWorkshop` and use `await` with each API call:
 
 ```python
+import os
 import asyncio
 from scale_workshop import AsyncScaleWorkshop
 
 client = AsyncScaleWorkshop(
-    api_key="My API Key",
+    # This is the default and can be omitted
+    api_key=os.environ.get("AWESOME_COMPANY_API_KEY"),
 )
 
 
 async def main() -> None:
-    evaluation_dataset_response_schema = await client.evaluation_datasets.create(
+    evaluation_dataset = await client.evaluation_datasets.create(
         account_id="account_id",
         name="name",
         schema_type="GENERATION",
         type="manual",
     )
-    print(evaluation_dataset_response_schema.id)
+    print(evaluation_dataset.id)
 
 
 asyncio.run(main())
@@ -79,6 +88,69 @@ Nested request parameters are [TypedDicts](https://docs.python.org/3/library/typ
 
 Typed requests and responses provide autocomplete and documentation within your editor. If you would like to see type errors in VS Code to help catch bugs earlier, set `python.analysis.typeCheckingMode` to `basic`.
 
+## Pagination
+
+List methods in the Scale Workshop API are paginated.
+
+This library provides auto-paginating iterators with each list response, so you do not have to request successive pages manually:
+
+```python
+from scale_workshop import ScaleWorkshop
+
+client = ScaleWorkshop()
+
+all_evaluation_datasets = []
+# Automatically fetches more pages as needed.
+for evaluation_dataset in client.evaluation_datasets.list():
+    # Do something with evaluation_dataset here
+    all_evaluation_datasets.append(evaluation_dataset)
+print(all_evaluation_datasets)
+```
+
+Or, asynchronously:
+
+```python
+import asyncio
+from scale_workshop import AsyncScaleWorkshop
+
+client = AsyncScaleWorkshop()
+
+
+async def main() -> None:
+    all_evaluation_datasets = []
+    # Iterate through items across all pages, issuing requests as needed.
+    async for evaluation_dataset in client.evaluation_datasets.list():
+        all_evaluation_datasets.append(evaluation_dataset)
+    print(all_evaluation_datasets)
+
+
+asyncio.run(main())
+```
+
+Alternatively, you can use the `.has_next_page()`, `.next_page_info()`, or `.get_next_page()` methods for more granular control working with pages:
+
+```python
+first_page = await client.evaluation_datasets.list()
+if first_page.has_next_page():
+    print(f"will fetch next page using these details: {first_page.next_page_info()}")
+    next_page = await first_page.get_next_page()
+    print(f"number of items we just fetched: {len(next_page.items)}")
+
+# Remove `await` for non-async usage.
+```
+
+Or just work directly with the returned data:
+
+```python
+first_page = await client.evaluation_datasets.list()
+
+print(f"page number: {first_page.current_page}")  # => "page number: 1"
+for evaluation_dataset in first_page.items:
+    print(evaluation_dataset.id)
+
+# Remove `await` for non-async usage.
+```
+
 ## Handling errors
 
 When the library is unable to connect to the API (for example, due to network connection problems or a timeout), a subclass of `scale_workshop.APIConnectionError` is raised.
@@ -92,9 +164,7 @@ All errors inherit from `scale_workshop.APIError`.
 import scale_workshop
 from scale_workshop import ScaleWorkshop
 
-client = ScaleWorkshop(
-    api_key="My API Key",
-)
+client = ScaleWorkshop()
 
 try:
     client.evaluation_datasets.create(
@@ -142,7 +212,6 @@ from scale_workshop import ScaleWorkshop
 client = ScaleWorkshop(
     # default is 2
     max_retries=0,
-    api_key="My API Key",
 )
 
 # Or, configure per-request:
@@ -166,13 +235,11 @@ from scale_workshop import ScaleWorkshop
 client = ScaleWorkshop(
     # 20 seconds (default is 1 minute)
     timeout=20.0,
-    api_key="My API Key",
 )
 
 # More granular control:
 client = ScaleWorkshop(
     timeout=httpx.Timeout(60.0, read=5.0, write=10.0, connect=2.0),
-    api_key="My API Key",
 )
 
 # Override per-request:
@@ -219,9 +286,7 @@ The "raw" Response object can be accessed by prefixing `.with_raw_response.` to 
 ```py
 from scale_workshop import ScaleWorkshop
 
-client = ScaleWorkshop(
-    api_key="My API Key",
-)
+client = ScaleWorkshop()
 response = client.evaluation_datasets.with_raw_response.create(
     account_id="account_id",
     name="name",
@@ -312,7 +377,6 @@ client = ScaleWorkshop(
         proxies="http://my.test.proxy.example.com",
         transport=httpx.HTTPTransport(local_address="0.0.0.0"),
     ),
-    api_key="My API Key",
 )
 ```
 
