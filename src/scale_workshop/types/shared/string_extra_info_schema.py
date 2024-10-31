@@ -11,4 +11,4 @@ __all__ = ["StringExtraInfoSchema"]
 class StringExtraInfoSchema(BaseModel):
     info: str
 
-    schema_type: Optional[Literal["STRING"]] = None
+    kind_schema: Optional[Literal["STRING"]] = None
