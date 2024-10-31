@@ -1,8 +1,8 @@
-# Stl Workshop Scale 20241031 Python API library
+# Scale Workshop Python API library
 
-[![PyPI version](https://img.shields.io/pypi/v/stl_workshop_scale_20241031.svg)](https://pypi.org/project/stl_workshop_scale_20241031/)
+[![PyPI version](https://img.shields.io/pypi/v/scale_workshop.svg)](https://pypi.org/project/scale_workshop/)
 
-The Stl Workshop Scale 20241031 Python library provides convenient access to the Stl Workshop Scale 20241031 REST API from any Python 3.7+
+The Scale Workshop Python library provides convenient access to the Scale Workshop REST API from any Python 3.7+
 application. The library includes type definitions for all request params and response fields,
 and offers both synchronous and asynchronous clients powered by [httpx](https://github.com/encode/httpx).
 
@@ -10,7 +10,7 @@ It is generated with [Stainless](https://www.stainlessapi.com/).
 
 ## Documentation
 
-The REST API documentation can be found on [docs.stl-workshop-scale-20241031.com](https://docs.stl-workshop-scale-20241031.com). The full API of this library can be found in [api.md](api.md).
+The REST API documentation can be found on [docs.scale-workshop.com](https://docs.scale-workshop.com). The full API of this library can be found in [api.md](api.md).
 
 ## Installation
 
@@ -20,45 +20,35 @@ pip install git+ssh://git@github.com/stainless-sdks/stl-workshop-scale-20241031-
 ```
 
 > [!NOTE]
-> Once this package is [published to PyPI](https://app.stainlessapi.com/docs/guides/publish), this will become: `pip install --pre stl_workshop_scale_20241031`
+> Once this package is [published to PyPI](https://app.stainlessapi.com/docs/guides/publish), this will become: `pip install --pre scale_workshop`
 
 ## Usage
 
 The full API of this library can be found in [api.md](api.md).
 
 ```python
-from stl_workshop_scale_20241031 import StlWorkshopScale20241031
+from scale_workshop import ScaleWorkshop
 
-client = StlWorkshopScale20241031()
+client = ScaleWorkshop()
 
-evaluation_dataset = client.evaluation_datasets.create(
-    account_id="account_id",
-    name="name",
-    schema_type="GENERATION",
-    type="manual",
-)
-print(evaluation_dataset.id)
+response = client.my_resource_name.my_method()
+print(response.current_page)
 ```
 
 ## Async usage
 
-Simply import `AsyncStlWorkshopScale20241031` instead of `StlWorkshopScale20241031` and use `await` with each API call:
+Simply import `AsyncScaleWorkshop` instead of `ScaleWorkshop` and use `await` with each API call:
 
 ```python
 import asyncio
-from stl_workshop_scale_20241031 import AsyncStlWorkshopScale20241031
+from scale_workshop import AsyncScaleWorkshop
 
-client = AsyncStlWorkshopScale20241031()
+client = AsyncScaleWorkshop()
 
 
 async def main() -> None:
-    evaluation_dataset = await client.evaluation_datasets.create(
-        account_id="account_id",
-        name="name",
-        schema_type="GENERATION",
-        type="manual",
-    )
-    print(evaluation_dataset.id)
+    response = await client.my_resource_name.my_method()
+    print(response.current_page)
 
 
 asyncio.run(main())
@@ -77,32 +67,27 @@ Typed requests and responses provide autocomplete and documentation within your 
 
 ## Handling errors
 
-When the library is unable to connect to the API (for example, due to network connection problems or a timeout), a subclass of `stl_workshop_scale_20241031.APIConnectionError` is raised.
+When the library is unable to connect to the API (for example, due to network connection problems or a timeout), a subclass of `scale_workshop.APIConnectionError` is raised.
 
 When the API returns a non-success status code (that is, 4xx or 5xx
-response), a subclass of `stl_workshop_scale_20241031.APIStatusError` is raised, containing `status_code` and `response` properties.
+response), a subclass of `scale_workshop.APIStatusError` is raised, containing `status_code` and `response` properties.
 
-All errors inherit from `stl_workshop_scale_20241031.APIError`.
+All errors inherit from `scale_workshop.APIError`.
 
 ```python
-import stl_workshop_scale_20241031
-from stl_workshop_scale_20241031 import StlWorkshopScale20241031
+import scale_workshop
+from scale_workshop import ScaleWorkshop
 
-client = StlWorkshopScale20241031()
+client = ScaleWorkshop()
 
 try:
-    client.evaluation_datasets.create(
-        account_id="account_id",
-        name="name",
-        schema_type="GENERATION",
-        type="manual",
-    )
-except stl_workshop_scale_20241031.APIConnectionError as e:
+    client.my_resource_name.my_method()
+except scale_workshop.APIConnectionError as e:
     print("The server could not be reached")
     print(e.__cause__)  # an underlying Exception, likely raised within httpx.
-except stl_workshop_scale_20241031.RateLimitError as e:
+except scale_workshop.RateLimitError as e:
     print("A 429 status code was received; we should back off a bit.")
-except stl_workshop_scale_20241031.APIStatusError as e:
+except scale_workshop.APIStatusError as e:
     print("Another non-200-range status code was received")
     print(e.status_code)
     print(e.response)
@@ -130,21 +115,16 @@ Connection errors (for example, due to a network connectivity problem), 408 Requ
 You can use the `max_retries` option to configure or disable retry settings:
 
 ```python
-from stl_workshop_scale_20241031 import StlWorkshopScale20241031
+from scale_workshop import ScaleWorkshop
 
 # Configure the default for all requests:
-client = StlWorkshopScale20241031(
+client = ScaleWorkshop(
     # default is 2
     max_retries=0,
 )
 
 # Or, configure per-request:
-client.with_options(max_retries=5).evaluation_datasets.create(
-    account_id="account_id",
-    name="name",
-    schema_type="GENERATION",
-    type="manual",
-)
+client.with_options(max_retries=5).my_resource_name.my_method()
 ```
 
 ### Timeouts
@@ -153,26 +133,21 @@ By default requests time out after 1 minute. You can configure this with a `time
 which accepts a float or an [`httpx.Timeout`](https://www.python-httpx.org/advanced/#fine-tuning-the-configuration) object:
 
 ```python
-from stl_workshop_scale_20241031 import StlWorkshopScale20241031
+from scale_workshop import ScaleWorkshop
 
 # Configure the default for all requests:
-client = StlWorkshopScale20241031(
+client = ScaleWorkshop(
     # 20 seconds (default is 1 minute)
     timeout=20.0,
 )
 
 # More granular control:
-client = StlWorkshopScale20241031(
+client = ScaleWorkshop(
     timeout=httpx.Timeout(60.0, read=5.0, write=10.0, connect=2.0),
 )
 
 # Override per-request:
-client.with_options(timeout=5.0).evaluation_datasets.create(
-    account_id="account_id",
-    name="name",
-    schema_type="GENERATION",
-    type="manual",
-)
+client.with_options(timeout=5.0).my_resource_name.my_method()
 ```
 
 On timeout, an `APITimeoutError` is thrown.
@@ -185,10 +160,10 @@ Note that requests that time out are [retried twice by default](#retries).
 
 We use the standard library [`logging`](https://docs.python.org/3/library/logging.html) module.
 
-You can enable logging by setting the environment variable `STL_WORKSHOP_SCALE_20241031_LOG` to `debug`.
+You can enable logging by setting the environment variable `SCALE_WORKSHOP_LOG` to `debug`.
 
 ```shell
-$ export STL_WORKSHOP_SCALE_20241031_LOG=debug
+$ export SCALE_WORKSHOP_LOG=debug
 ```
 
 ### How to tell whether `None` means `null` or missing
@@ -208,24 +183,19 @@ if response.my_field is None:
 The "raw" Response object can be accessed by prefixing `.with_raw_response.` to any HTTP method call, e.g.,
 
 ```py
-from stl_workshop_scale_20241031 import StlWorkshopScale20241031
+from scale_workshop import ScaleWorkshop
 
-client = StlWorkshopScale20241031()
-response = client.evaluation_datasets.with_raw_response.create(
-    account_id="account_id",
-    name="name",
-    schema_type="GENERATION",
-    type="manual",
-)
+client = ScaleWorkshop()
+response = client.my_resource_name.with_raw_response.my_method()
 print(response.headers.get('X-My-Header'))
 
-evaluation_dataset = response.parse()  # get the object that `evaluation_datasets.create()` would have returned
-print(evaluation_dataset.id)
+my_resource_name = response.parse()  # get the object that `my_resource_name.my_method()` would have returned
+print(my_resource_name.current_page)
 ```
 
-These methods return an [`APIResponse`](https://github.com/stainless-sdks/stl-workshop-scale-20241031-python/tree/main/src/stl_workshop_scale_20241031/_response.py) object.
+These methods return an [`APIResponse`](https://github.com/stainless-sdks/stl-workshop-scale-20241031-python/tree/main/src/scale_workshop/_response.py) object.
 
-The async client returns an [`AsyncAPIResponse`](https://github.com/stainless-sdks/stl-workshop-scale-20241031-python/tree/main/src/stl_workshop_scale_20241031/_response.py) with the same structure, the only difference being `await`able methods for reading the response content.
+The async client returns an [`AsyncAPIResponse`](https://github.com/stainless-sdks/stl-workshop-scale-20241031-python/tree/main/src/scale_workshop/_response.py) with the same structure, the only difference being `await`able methods for reading the response content.
 
 #### `.with_streaming_response`
 
@@ -234,12 +204,7 @@ The above interface eagerly reads the full response body when you make the reque
 To stream the response body, use `.with_streaming_response` instead, which requires a context manager and only reads the response body once you call `.read()`, `.text()`, `.json()`, `.iter_bytes()`, `.iter_text()`, `.iter_lines()` or `.parse()`. In the async client, these are async methods.
 
 ```python
-with client.evaluation_datasets.with_streaming_response.create(
-    account_id="account_id",
-    name="name",
-    schema_type="GENERATION",
-    type="manual",
-) as response:
+with client.my_resource_name.with_streaming_response.my_method() as response:
     print(response.headers.get("X-My-Header"))
 
     for line in response.iter_lines():
@@ -292,10 +257,10 @@ You can directly override the [httpx client](https://www.python-httpx.org/api/#c
 - Additional [advanced](https://www.python-httpx.org/advanced/clients/) functionality
 
 ```python
-from stl_workshop_scale_20241031 import StlWorkshopScale20241031, DefaultHttpxClient
+from scale_workshop import ScaleWorkshop, DefaultHttpxClient
 
-client = StlWorkshopScale20241031(
-    # Or use the `STL_WORKSHOP_SCALE_20241031_BASE_URL` env var
+client = ScaleWorkshop(
+    # Or use the `SCALE_WORKSHOP_BASE_URL` env var
     base_url="http://my.test.server.example.com:8083",
     http_client=DefaultHttpxClient(
         proxies="http://my.test.proxy.example.com",
@@ -333,8 +298,8 @@ If you've upgraded to the latest version but aren't seeing any new features you 
 You can determine the version that is being used at runtime with:
 
 ```py
-import stl_workshop_scale_20241031
-print(stl_workshop_scale_20241031.__version__)
+import scale_workshop
+print(scale_workshop.__version__)
 ```
 
 ## Requirements

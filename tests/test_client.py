@@ -17,16 +17,12 @@ import pytest
 from respx import MockRouter
 from pydantic import ValidationError
 
-from stl_workshop_scale_20241031 import (
-    StlWorkshopScale20241031,
-    APIResponseValidationError,
-    AsyncStlWorkshopScale20241031,
-)
-from stl_workshop_scale_20241031._types import Omit
-from stl_workshop_scale_20241031._models import BaseModel, FinalRequestOptions
-from stl_workshop_scale_20241031._constants import RAW_RESPONSE_HEADER
-from stl_workshop_scale_20241031._exceptions import APIStatusError, APITimeoutError, APIResponseValidationError
-from stl_workshop_scale_20241031._base_client import (
+from scale_workshop import ScaleWorkshop, AsyncScaleWorkshop, APIResponseValidationError
+from scale_workshop._types import Omit
+from scale_workshop._models import BaseModel, FinalRequestOptions
+from scale_workshop._constants import RAW_RESPONSE_HEADER
+from scale_workshop._exceptions import APIStatusError, APITimeoutError, APIResponseValidationError
+from scale_workshop._base_client import (
     DEFAULT_TIMEOUT,
     HTTPX_DEFAULT_TIMEOUT,
     BaseClient,
@@ -48,7 +44,7 @@ def _low_retry_timeout(*_args: Any, **_kwargs: Any) -> float:
     return 0.1
 
 
-def _get_open_connections(client: StlWorkshopScale20241031 | AsyncStlWorkshopScale20241031) -> int:
+def _get_open_connections(client: ScaleWorkshop | AsyncScaleWorkshop) -> int:
     transport = client._client._transport
     assert isinstance(transport, httpx.HTTPTransport) or isinstance(transport, httpx.AsyncHTTPTransport)
 
@@ -56,8 +52,8 @@ def _get_open_connections(client: StlWorkshopScale20241031 | AsyncStlWorkshopSca
     return len(pool._requests)
 
 
-class TestStlWorkshopScale20241031:
-    client = StlWorkshopScale20241031(base_url=base_url, _strict_response_validation=True)
+class TestScaleWorkshop:
+    client = ScaleWorkshop(base_url=base_url, _strict_response_validation=True)
 
     @pytest.mark.respx(base_url=base_url)
     def test_raw_response(self, respx_mock: MockRouter) -> None:
@@ -100,9 +96,7 @@ class TestStlWorkshopScale20241031:
         assert isinstance(self.client.timeout, httpx.Timeout)
 
     def test_copy_default_headers(self) -> None:
-        client = StlWorkshopScale20241031(
-            base_url=base_url, _strict_response_validation=True, default_headers={"X-Foo": "bar"}
-        )
+        client = ScaleWorkshop(base_url=base_url, _strict_response_validation=True, default_headers={"X-Foo": "bar"})
         assert client.default_headers["X-Foo"] == "bar"
 
         # does not override the already given value when not specified
@@ -134,9 +128,7 @@ class TestStlWorkshopScale20241031:
             client.copy(set_default_headers={}, default_headers={"X-Foo": "Bar"})
 
     def test_copy_default_query(self) -> None:
-        client = StlWorkshopScale20241031(
-            base_url=base_url, _strict_response_validation=True, default_query={"foo": "bar"}
-        )
+        client = ScaleWorkshop(base_url=base_url, _strict_response_validation=True, default_query={"foo": "bar"})
         assert _get_params(client)["foo"] == "bar"
 
         # does not override the already given value when not specified
@@ -225,10 +217,10 @@ class TestStlWorkshopScale20241031:
                         # to_raw_response_wrapper leaks through the @functools.wraps() decorator.
                         #
                         # removing the decorator fixes the leak for reasons we don't understand.
-                        "stl_workshop_scale_20241031/_legacy_response.py",
-                        "stl_workshop_scale_20241031/_response.py",
+                        "scale_workshop/_legacy_response.py",
+                        "scale_workshop/_response.py",
                         # pydantic.BaseModel.model_dump || pydantic.BaseModel.dict leak memory for some reason.
-                        "stl_workshop_scale_20241031/_compat.py",
+                        "scale_workshop/_compat.py",
                         # Standard library leaks we don't care about.
                         "/logging/__init__.py",
                     ]
@@ -259,7 +251,7 @@ class TestStlWorkshopScale20241031:
         assert timeout == httpx.Timeout(100.0)
 
     def test_client_timeout_option(self) -> None:
-        client = StlWorkshopScale20241031(base_url=base_url, _strict_response_validation=True, timeout=httpx.Timeout(0))
+        client = ScaleWorkshop(base_url=base_url, _strict_response_validation=True, timeout=httpx.Timeout(0))
 
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
         timeout = httpx.Timeout(**request.extensions["timeout"])  # type: ignore
@@ -268,9 +260,7 @@ class TestStlWorkshopScale20241031:
     def test_http_client_timeout_option(self) -> None:
         # custom timeout given to the httpx client should be used
         with httpx.Client(timeout=None) as http_client:
-            client = StlWorkshopScale20241031(
-                base_url=base_url, _strict_response_validation=True, http_client=http_client
-            )
+            client = ScaleWorkshop(base_url=base_url, _strict_response_validation=True, http_client=http_client)
 
             request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
             timeout = httpx.Timeout(**request.extensions["timeout"])  # type: ignore
@@ -278,9 +268,7 @@ class TestStlWorkshopScale20241031:
 
         # no timeout given to the httpx client should not use the httpx default
         with httpx.Client() as http_client:
-            client = StlWorkshopScale20241031(
-                base_url=base_url, _strict_response_validation=True, http_client=http_client
-            )
+            client = ScaleWorkshop(base_url=base_url, _strict_response_validation=True, http_client=http_client)
 
             request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
             timeout = httpx.Timeout(**request.extensions["timeout"])  # type: ignore
@@ -288,9 +276,7 @@ class TestStlWorkshopScale20241031:
 
         # explicitly passing the default timeout currently results in it being ignored
         with httpx.Client(timeout=HTTPX_DEFAULT_TIMEOUT) as http_client:
-            client = StlWorkshopScale20241031(
-                base_url=base_url, _strict_response_validation=True, http_client=http_client
-            )
+            client = ScaleWorkshop(base_url=base_url, _strict_response_validation=True, http_client=http_client)
 
             request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
             timeout = httpx.Timeout(**request.extensions["timeout"])  # type: ignore
@@ -299,19 +285,15 @@ class TestStlWorkshopScale20241031:
     async def test_invalid_http_client(self) -> None:
         with pytest.raises(TypeError, match="Invalid `http_client` arg"):
             async with httpx.AsyncClient() as http_client:
-                StlWorkshopScale20241031(
-                    base_url=base_url, _strict_response_validation=True, http_client=cast(Any, http_client)
-                )
+                ScaleWorkshop(base_url=base_url, _strict_response_validation=True, http_client=cast(Any, http_client))
 
     def test_default_headers_option(self) -> None:
-        client = StlWorkshopScale20241031(
-            base_url=base_url, _strict_response_validation=True, default_headers={"X-Foo": "bar"}
-        )
+        client = ScaleWorkshop(base_url=base_url, _strict_response_validation=True, default_headers={"X-Foo": "bar"})
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
         assert request.headers.get("x-foo") == "bar"
         assert request.headers.get("x-stainless-lang") == "python"
 
-        client2 = StlWorkshopScale20241031(
+        client2 = ScaleWorkshop(
             base_url=base_url,
             _strict_response_validation=True,
             default_headers={
@@ -324,7 +306,7 @@ class TestStlWorkshopScale20241031:
         assert request.headers.get("x-stainless-lang") == "my-overriding-header"
 
     def test_default_query_option(self) -> None:
-        client = StlWorkshopScale20241031(
+        client = ScaleWorkshop(
             base_url=base_url, _strict_response_validation=True, default_query={"query_param": "bar"}
         )
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
@@ -438,7 +420,7 @@ class TestStlWorkshopScale20241031:
         params = dict(request.url.params)
         assert params == {"foo": "2"}
 
-    def test_multipart_repeating_array(self, client: StlWorkshopScale20241031) -> None:
+    def test_multipart_repeating_array(self, client: ScaleWorkshop) -> None:
         request = client._build_request(
             FinalRequestOptions.construct(
                 method="get",
@@ -525,7 +507,7 @@ class TestStlWorkshopScale20241031:
         assert response.foo == 2
 
     def test_base_url_setter(self) -> None:
-        client = StlWorkshopScale20241031(base_url="https://example.com/from_init", _strict_response_validation=True)
+        client = ScaleWorkshop(base_url="https://example.com/from_init", _strict_response_validation=True)
         assert client.base_url == "https://example.com/from_init/"
 
         client.base_url = "https://example.com/from_setter"  # type: ignore[assignment]
@@ -533,15 +515,15 @@ class TestStlWorkshopScale20241031:
         assert client.base_url == "https://example.com/from_setter/"
 
     def test_base_url_env(self) -> None:
-        with update_env(STL_WORKSHOP_SCALE_20241031_BASE_URL="http://localhost:5000/from/env"):
-            client = StlWorkshopScale20241031(_strict_response_validation=True)
+        with update_env(SCALE_WORKSHOP_BASE_URL="http://localhost:5000/from/env"):
+            client = ScaleWorkshop(_strict_response_validation=True)
             assert client.base_url == "http://localhost:5000/from/env/"
 
     @pytest.mark.parametrize(
         "client",
         [
-            StlWorkshopScale20241031(base_url="http://localhost:5000/custom/path/", _strict_response_validation=True),
-            StlWorkshopScale20241031(
+            ScaleWorkshop(base_url="http://localhost:5000/custom/path/", _strict_response_validation=True),
+            ScaleWorkshop(
                 base_url="http://localhost:5000/custom/path/",
                 _strict_response_validation=True,
                 http_client=httpx.Client(),
@@ -549,7 +531,7 @@ class TestStlWorkshopScale20241031:
         ],
         ids=["standard", "custom http client"],
     )
-    def test_base_url_trailing_slash(self, client: StlWorkshopScale20241031) -> None:
+    def test_base_url_trailing_slash(self, client: ScaleWorkshop) -> None:
         request = client._build_request(
             FinalRequestOptions(
                 method="post",
@@ -562,8 +544,8 @@ class TestStlWorkshopScale20241031:
     @pytest.mark.parametrize(
         "client",
         [
-            StlWorkshopScale20241031(base_url="http://localhost:5000/custom/path/", _strict_response_validation=True),
-            StlWorkshopScale20241031(
+            ScaleWorkshop(base_url="http://localhost:5000/custom/path/", _strict_response_validation=True),
+            ScaleWorkshop(
                 base_url="http://localhost:5000/custom/path/",
                 _strict_response_validation=True,
                 http_client=httpx.Client(),
@@ -571,7 +553,7 @@ class TestStlWorkshopScale20241031:
         ],
         ids=["standard", "custom http client"],
     )
-    def test_base_url_no_trailing_slash(self, client: StlWorkshopScale20241031) -> None:
+    def test_base_url_no_trailing_slash(self, client: ScaleWorkshop) -> None:
         request = client._build_request(
             FinalRequestOptions(
                 method="post",
@@ -584,8 +566,8 @@ class TestStlWorkshopScale20241031:
     @pytest.mark.parametrize(
         "client",
         [
-            StlWorkshopScale20241031(base_url="http://localhost:5000/custom/path/", _strict_response_validation=True),
-            StlWorkshopScale20241031(
+            ScaleWorkshop(base_url="http://localhost:5000/custom/path/", _strict_response_validation=True),
+            ScaleWorkshop(
                 base_url="http://localhost:5000/custom/path/",
                 _strict_response_validation=True,
                 http_client=httpx.Client(),
@@ -593,7 +575,7 @@ class TestStlWorkshopScale20241031:
         ],
         ids=["standard", "custom http client"],
     )
-    def test_absolute_request_url(self, client: StlWorkshopScale20241031) -> None:
+    def test_absolute_request_url(self, client: ScaleWorkshop) -> None:
         request = client._build_request(
             FinalRequestOptions(
                 method="post",
@@ -604,7 +586,7 @@ class TestStlWorkshopScale20241031:
         assert request.url == "https://myapi.com/foo"
 
     def test_copied_client_does_not_close_http(self) -> None:
-        client = StlWorkshopScale20241031(base_url=base_url, _strict_response_validation=True)
+        client = ScaleWorkshop(base_url=base_url, _strict_response_validation=True)
         assert not client.is_closed()
 
         copied = client.copy()
@@ -615,7 +597,7 @@ class TestStlWorkshopScale20241031:
         assert not client.is_closed()
 
     def test_client_context_manager(self) -> None:
-        client = StlWorkshopScale20241031(base_url=base_url, _strict_response_validation=True)
+        client = ScaleWorkshop(base_url=base_url, _strict_response_validation=True)
         with client as c2:
             assert c2 is client
             assert not c2.is_closed()
@@ -636,7 +618,7 @@ class TestStlWorkshopScale20241031:
 
     def test_client_max_retries_validation(self) -> None:
         with pytest.raises(TypeError, match=r"max_retries cannot be None"):
-            StlWorkshopScale20241031(base_url=base_url, _strict_response_validation=True, max_retries=cast(Any, None))
+            ScaleWorkshop(base_url=base_url, _strict_response_validation=True, max_retries=cast(Any, None))
 
     @pytest.mark.respx(base_url=base_url)
     def test_received_text_for_expected_json(self, respx_mock: MockRouter) -> None:
@@ -645,12 +627,12 @@ class TestStlWorkshopScale20241031:
 
         respx_mock.get("/foo").mock(return_value=httpx.Response(200, text="my-custom-format"))
 
-        strict_client = StlWorkshopScale20241031(base_url=base_url, _strict_response_validation=True)
+        strict_client = ScaleWorkshop(base_url=base_url, _strict_response_validation=True)
 
         with pytest.raises(APIResponseValidationError):
             strict_client.get("/foo", cast_to=Model)
 
-        client = StlWorkshopScale20241031(base_url=base_url, _strict_response_validation=False)
+        client = ScaleWorkshop(base_url=base_url, _strict_response_validation=False)
 
         response = client.get("/foo", cast_to=Model)
         assert isinstance(response, str)  # type: ignore[unreachable]
@@ -678,50 +660,44 @@ class TestStlWorkshopScale20241031:
     )
     @mock.patch("time.time", mock.MagicMock(return_value=1696004797))
     def test_parse_retry_after_header(self, remaining_retries: int, retry_after: str, timeout: float) -> None:
-        client = StlWorkshopScale20241031(base_url=base_url, _strict_response_validation=True)
+        client = ScaleWorkshop(base_url=base_url, _strict_response_validation=True)
 
         headers = httpx.Headers({"retry-after": retry_after})
         options = FinalRequestOptions(method="get", url="/foo", max_retries=3)
         calculated = client._calculate_retry_timeout(remaining_retries, options, headers)
         assert calculated == pytest.approx(timeout, 0.5 * 0.875)  # pyright: ignore[reportUnknownMemberType]
 
-    @mock.patch("stl_workshop_scale_20241031._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("scale_workshop._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     def test_retrying_timeout_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
-        respx_mock.post("/v4/evaluation-datasets").mock(side_effect=httpx.TimeoutException("Test timeout error"))
+        respx_mock.get("/v4/evaluation-datasets").mock(side_effect=httpx.TimeoutException("Test timeout error"))
 
         with pytest.raises(APITimeoutError):
-            self.client.post(
-                "/v4/evaluation-datasets",
-                body=cast(object, dict(account_id="account_id", name="name", schema_type="GENERATION", type="manual")),
-                cast_to=httpx.Response,
-                options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
+            self.client.get(
+                "/v4/evaluation-datasets", cast_to=httpx.Response, options={"headers": {RAW_RESPONSE_HEADER: "stream"}}
             )
 
         assert _get_open_connections(self.client) == 0
 
-    @mock.patch("stl_workshop_scale_20241031._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("scale_workshop._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     def test_retrying_status_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
-        respx_mock.post("/v4/evaluation-datasets").mock(return_value=httpx.Response(500))
+        respx_mock.get("/v4/evaluation-datasets").mock(return_value=httpx.Response(500))
 
         with pytest.raises(APIStatusError):
-            self.client.post(
-                "/v4/evaluation-datasets",
-                body=cast(object, dict(account_id="account_id", name="name", schema_type="GENERATION", type="manual")),
-                cast_to=httpx.Response,
-                options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
+            self.client.get(
+                "/v4/evaluation-datasets", cast_to=httpx.Response, options={"headers": {RAW_RESPONSE_HEADER: "stream"}}
             )
 
         assert _get_open_connections(self.client) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("stl_workshop_scale_20241031._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("scale_workshop._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.parametrize("failure_mode", ["status", "exception"])
     def test_retries_taken(
         self,
-        client: StlWorkshopScale20241031,
+        client: ScaleWorkshop,
         failures_before_success: int,
         failure_mode: Literal["status", "exception"],
         respx_mock: MockRouter,
@@ -739,20 +715,18 @@ class TestStlWorkshopScale20241031:
                 return httpx.Response(500)
             return httpx.Response(200)
 
-        respx_mock.post("/v4/evaluation-datasets").mock(side_effect=retry_handler)
+        respx_mock.get("/v4/evaluation-datasets").mock(side_effect=retry_handler)
 
-        response = client.evaluation_datasets.with_raw_response.create(
-            account_id="account_id", name="name", schema_type="GENERATION", type="manual"
-        )
+        response = client.my_resource_name.with_raw_response.my_method()
 
         assert response.retries_taken == failures_before_success
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("stl_workshop_scale_20241031._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("scale_workshop._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     def test_omit_retry_count_header(
-        self, client: StlWorkshopScale20241031, failures_before_success: int, respx_mock: MockRouter
+        self, client: ScaleWorkshop, failures_before_success: int, respx_mock: MockRouter
     ) -> None:
         client = client.with_options(max_retries=4)
 
@@ -765,23 +739,19 @@ class TestStlWorkshopScale20241031:
                 return httpx.Response(500)
             return httpx.Response(200)
 
-        respx_mock.post("/v4/evaluation-datasets").mock(side_effect=retry_handler)
+        respx_mock.get("/v4/evaluation-datasets").mock(side_effect=retry_handler)
 
-        response = client.evaluation_datasets.with_raw_response.create(
-            account_id="account_id",
-            name="name",
-            schema_type="GENERATION",
-            type="manual",
-            extra_headers={"x-stainless-retry-count": Omit()},
+        response = client.my_resource_name.with_raw_response.my_method(
+            extra_headers={"x-stainless-retry-count": Omit()}
         )
 
         assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("stl_workshop_scale_20241031._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("scale_workshop._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     def test_overwrite_retry_count_header(
-        self, client: StlWorkshopScale20241031, failures_before_success: int, respx_mock: MockRouter
+        self, client: ScaleWorkshop, failures_before_success: int, respx_mock: MockRouter
     ) -> None:
         client = client.with_options(max_retries=4)
 
@@ -794,21 +764,15 @@ class TestStlWorkshopScale20241031:
                 return httpx.Response(500)
             return httpx.Response(200)
 
-        respx_mock.post("/v4/evaluation-datasets").mock(side_effect=retry_handler)
+        respx_mock.get("/v4/evaluation-datasets").mock(side_effect=retry_handler)
 
-        response = client.evaluation_datasets.with_raw_response.create(
-            account_id="account_id",
-            name="name",
-            schema_type="GENERATION",
-            type="manual",
-            extra_headers={"x-stainless-retry-count": "42"},
-        )
+        response = client.my_resource_name.with_raw_response.my_method(extra_headers={"x-stainless-retry-count": "42"})
 
         assert response.http_request.headers.get("x-stainless-retry-count") == "42"
 
 
-class TestAsyncStlWorkshopScale20241031:
-    client = AsyncStlWorkshopScale20241031(base_url=base_url, _strict_response_validation=True)
+class TestAsyncScaleWorkshop:
+    client = AsyncScaleWorkshop(base_url=base_url, _strict_response_validation=True)
 
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.asyncio
@@ -853,7 +817,7 @@ class TestAsyncStlWorkshopScale20241031:
         assert isinstance(self.client.timeout, httpx.Timeout)
 
     def test_copy_default_headers(self) -> None:
-        client = AsyncStlWorkshopScale20241031(
+        client = AsyncScaleWorkshop(
             base_url=base_url, _strict_response_validation=True, default_headers={"X-Foo": "bar"}
         )
         assert client.default_headers["X-Foo"] == "bar"
@@ -887,9 +851,7 @@ class TestAsyncStlWorkshopScale20241031:
             client.copy(set_default_headers={}, default_headers={"X-Foo": "Bar"})
 
     def test_copy_default_query(self) -> None:
-        client = AsyncStlWorkshopScale20241031(
-            base_url=base_url, _strict_response_validation=True, default_query={"foo": "bar"}
-        )
+        client = AsyncScaleWorkshop(base_url=base_url, _strict_response_validation=True, default_query={"foo": "bar"})
         assert _get_params(client)["foo"] == "bar"
 
         # does not override the already given value when not specified
@@ -978,10 +940,10 @@ class TestAsyncStlWorkshopScale20241031:
                         # to_raw_response_wrapper leaks through the @functools.wraps() decorator.
                         #
                         # removing the decorator fixes the leak for reasons we don't understand.
-                        "stl_workshop_scale_20241031/_legacy_response.py",
-                        "stl_workshop_scale_20241031/_response.py",
+                        "scale_workshop/_legacy_response.py",
+                        "scale_workshop/_response.py",
                         # pydantic.BaseModel.model_dump || pydantic.BaseModel.dict leak memory for some reason.
-                        "stl_workshop_scale_20241031/_compat.py",
+                        "scale_workshop/_compat.py",
                         # Standard library leaks we don't care about.
                         "/logging/__init__.py",
                     ]
@@ -1012,9 +974,7 @@ class TestAsyncStlWorkshopScale20241031:
         assert timeout == httpx.Timeout(100.0)
 
     async def test_client_timeout_option(self) -> None:
-        client = AsyncStlWorkshopScale20241031(
-            base_url=base_url, _strict_response_validation=True, timeout=httpx.Timeout(0)
-        )
+        client = AsyncScaleWorkshop(base_url=base_url, _strict_response_validation=True, timeout=httpx.Timeout(0))
 
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
         timeout = httpx.Timeout(**request.extensions["timeout"])  # type: ignore
@@ -1023,9 +983,7 @@ class TestAsyncStlWorkshopScale20241031:
     async def test_http_client_timeout_option(self) -> None:
         # custom timeout given to the httpx client should be used
         async with httpx.AsyncClient(timeout=None) as http_client:
-            client = AsyncStlWorkshopScale20241031(
-                base_url=base_url, _strict_response_validation=True, http_client=http_client
-            )
+            client = AsyncScaleWorkshop(base_url=base_url, _strict_response_validation=True, http_client=http_client)
 
             request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
             timeout = httpx.Timeout(**request.extensions["timeout"])  # type: ignore
@@ -1033,9 +991,7 @@ class TestAsyncStlWorkshopScale20241031:
 
         # no timeout given to the httpx client should not use the httpx default
         async with httpx.AsyncClient() as http_client:
-            client = AsyncStlWorkshopScale20241031(
-                base_url=base_url, _strict_response_validation=True, http_client=http_client
-            )
+            client = AsyncScaleWorkshop(base_url=base_url, _strict_response_validation=True, http_client=http_client)
 
             request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
             timeout = httpx.Timeout(**request.extensions["timeout"])  # type: ignore
@@ -1043,9 +999,7 @@ class TestAsyncStlWorkshopScale20241031:
 
         # explicitly passing the default timeout currently results in it being ignored
         async with httpx.AsyncClient(timeout=HTTPX_DEFAULT_TIMEOUT) as http_client:
-            client = AsyncStlWorkshopScale20241031(
-                base_url=base_url, _strict_response_validation=True, http_client=http_client
-            )
+            client = AsyncScaleWorkshop(base_url=base_url, _strict_response_validation=True, http_client=http_client)
 
             request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
             timeout = httpx.Timeout(**request.extensions["timeout"])  # type: ignore
@@ -1054,19 +1008,19 @@ class TestAsyncStlWorkshopScale20241031:
     def test_invalid_http_client(self) -> None:
         with pytest.raises(TypeError, match="Invalid `http_client` arg"):
             with httpx.Client() as http_client:
-                AsyncStlWorkshopScale20241031(
+                AsyncScaleWorkshop(
                     base_url=base_url, _strict_response_validation=True, http_client=cast(Any, http_client)
                 )
 
     def test_default_headers_option(self) -> None:
-        client = AsyncStlWorkshopScale20241031(
+        client = AsyncScaleWorkshop(
             base_url=base_url, _strict_response_validation=True, default_headers={"X-Foo": "bar"}
         )
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
         assert request.headers.get("x-foo") == "bar"
         assert request.headers.get("x-stainless-lang") == "python"
 
-        client2 = AsyncStlWorkshopScale20241031(
+        client2 = AsyncScaleWorkshop(
             base_url=base_url,
             _strict_response_validation=True,
             default_headers={
@@ -1079,7 +1033,7 @@ class TestAsyncStlWorkshopScale20241031:
         assert request.headers.get("x-stainless-lang") == "my-overriding-header"
 
     def test_default_query_option(self) -> None:
-        client = AsyncStlWorkshopScale20241031(
+        client = AsyncScaleWorkshop(
             base_url=base_url, _strict_response_validation=True, default_query={"query_param": "bar"}
         )
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
@@ -1193,7 +1147,7 @@ class TestAsyncStlWorkshopScale20241031:
         params = dict(request.url.params)
         assert params == {"foo": "2"}
 
-    def test_multipart_repeating_array(self, async_client: AsyncStlWorkshopScale20241031) -> None:
+    def test_multipart_repeating_array(self, async_client: AsyncScaleWorkshop) -> None:
         request = async_client._build_request(
             FinalRequestOptions.construct(
                 method="get",
@@ -1280,9 +1234,7 @@ class TestAsyncStlWorkshopScale20241031:
         assert response.foo == 2
 
     def test_base_url_setter(self) -> None:
-        client = AsyncStlWorkshopScale20241031(
-            base_url="https://example.com/from_init", _strict_response_validation=True
-        )
+        client = AsyncScaleWorkshop(base_url="https://example.com/from_init", _strict_response_validation=True)
         assert client.base_url == "https://example.com/from_init/"
 
         client.base_url = "https://example.com/from_setter"  # type: ignore[assignment]
@@ -1290,17 +1242,15 @@ class TestAsyncStlWorkshopScale20241031:
         assert client.base_url == "https://example.com/from_setter/"
 
     def test_base_url_env(self) -> None:
-        with update_env(STL_WORKSHOP_SCALE_20241031_BASE_URL="http://localhost:5000/from/env"):
-            client = AsyncStlWorkshopScale20241031(_strict_response_validation=True)
+        with update_env(SCALE_WORKSHOP_BASE_URL="http://localhost:5000/from/env"):
+            client = AsyncScaleWorkshop(_strict_response_validation=True)
             assert client.base_url == "http://localhost:5000/from/env/"
 
     @pytest.mark.parametrize(
         "client",
         [
-            AsyncStlWorkshopScale20241031(
-                base_url="http://localhost:5000/custom/path/", _strict_response_validation=True
-            ),
-            AsyncStlWorkshopScale20241031(
+            AsyncScaleWorkshop(base_url="http://localhost:5000/custom/path/", _strict_response_validation=True),
+            AsyncScaleWorkshop(
                 base_url="http://localhost:5000/custom/path/",
                 _strict_response_validation=True,
                 http_client=httpx.AsyncClient(),
@@ -1308,7 +1258,7 @@ class TestAsyncStlWorkshopScale20241031:
         ],
         ids=["standard", "custom http client"],
     )
-    def test_base_url_trailing_slash(self, client: AsyncStlWorkshopScale20241031) -> None:
+    def test_base_url_trailing_slash(self, client: AsyncScaleWorkshop) -> None:
         request = client._build_request(
             FinalRequestOptions(
                 method="post",
@@ -1321,10 +1271,8 @@ class TestAsyncStlWorkshopScale20241031:
     @pytest.mark.parametrize(
         "client",
         [
-            AsyncStlWorkshopScale20241031(
-                base_url="http://localhost:5000/custom/path/", _strict_response_validation=True
-            ),
-            AsyncStlWorkshopScale20241031(
+            AsyncScaleWorkshop(base_url="http://localhost:5000/custom/path/", _strict_response_validation=True),
+            AsyncScaleWorkshop(
                 base_url="http://localhost:5000/custom/path/",
                 _strict_response_validation=True,
                 http_client=httpx.AsyncClient(),
@@ -1332,7 +1280,7 @@ class TestAsyncStlWorkshopScale20241031:
         ],
         ids=["standard", "custom http client"],
     )
-    def test_base_url_no_trailing_slash(self, client: AsyncStlWorkshopScale20241031) -> None:
+    def test_base_url_no_trailing_slash(self, client: AsyncScaleWorkshop) -> None:
         request = client._build_request(
             FinalRequestOptions(
                 method="post",
@@ -1345,10 +1293,8 @@ class TestAsyncStlWorkshopScale20241031:
     @pytest.mark.parametrize(
         "client",
         [
-            AsyncStlWorkshopScale20241031(
-                base_url="http://localhost:5000/custom/path/", _strict_response_validation=True
-            ),
-            AsyncStlWorkshopScale20241031(
+            AsyncScaleWorkshop(base_url="http://localhost:5000/custom/path/", _strict_response_validation=True),
+            AsyncScaleWorkshop(
                 base_url="http://localhost:5000/custom/path/",
                 _strict_response_validation=True,
                 http_client=httpx.AsyncClient(),
@@ -1356,7 +1302,7 @@ class TestAsyncStlWorkshopScale20241031:
         ],
         ids=["standard", "custom http client"],
     )
-    def test_absolute_request_url(self, client: AsyncStlWorkshopScale20241031) -> None:
+    def test_absolute_request_url(self, client: AsyncScaleWorkshop) -> None:
         request = client._build_request(
             FinalRequestOptions(
                 method="post",
@@ -1367,7 +1313,7 @@ class TestAsyncStlWorkshopScale20241031:
         assert request.url == "https://myapi.com/foo"
 
     async def test_copied_client_does_not_close_http(self) -> None:
-        client = AsyncStlWorkshopScale20241031(base_url=base_url, _strict_response_validation=True)
+        client = AsyncScaleWorkshop(base_url=base_url, _strict_response_validation=True)
         assert not client.is_closed()
 
         copied = client.copy()
@@ -1379,7 +1325,7 @@ class TestAsyncStlWorkshopScale20241031:
         assert not client.is_closed()
 
     async def test_client_context_manager(self) -> None:
-        client = AsyncStlWorkshopScale20241031(base_url=base_url, _strict_response_validation=True)
+        client = AsyncScaleWorkshop(base_url=base_url, _strict_response_validation=True)
         async with client as c2:
             assert c2 is client
             assert not c2.is_closed()
@@ -1401,9 +1347,7 @@ class TestAsyncStlWorkshopScale20241031:
 
     async def test_client_max_retries_validation(self) -> None:
         with pytest.raises(TypeError, match=r"max_retries cannot be None"):
-            AsyncStlWorkshopScale20241031(
-                base_url=base_url, _strict_response_validation=True, max_retries=cast(Any, None)
-            )
+            AsyncScaleWorkshop(base_url=base_url, _strict_response_validation=True, max_retries=cast(Any, None))
 
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.asyncio
@@ -1413,12 +1357,12 @@ class TestAsyncStlWorkshopScale20241031:
 
         respx_mock.get("/foo").mock(return_value=httpx.Response(200, text="my-custom-format"))
 
-        strict_client = AsyncStlWorkshopScale20241031(base_url=base_url, _strict_response_validation=True)
+        strict_client = AsyncScaleWorkshop(base_url=base_url, _strict_response_validation=True)
 
         with pytest.raises(APIResponseValidationError):
             await strict_client.get("/foo", cast_to=Model)
 
-        client = AsyncStlWorkshopScale20241031(base_url=base_url, _strict_response_validation=False)
+        client = AsyncScaleWorkshop(base_url=base_url, _strict_response_validation=False)
 
         response = await client.get("/foo", cast_to=Model)
         assert isinstance(response, str)  # type: ignore[unreachable]
@@ -1447,51 +1391,45 @@ class TestAsyncStlWorkshopScale20241031:
     @mock.patch("time.time", mock.MagicMock(return_value=1696004797))
     @pytest.mark.asyncio
     async def test_parse_retry_after_header(self, remaining_retries: int, retry_after: str, timeout: float) -> None:
-        client = AsyncStlWorkshopScale20241031(base_url=base_url, _strict_response_validation=True)
+        client = AsyncScaleWorkshop(base_url=base_url, _strict_response_validation=True)
 
         headers = httpx.Headers({"retry-after": retry_after})
         options = FinalRequestOptions(method="get", url="/foo", max_retries=3)
         calculated = client._calculate_retry_timeout(remaining_retries, options, headers)
         assert calculated == pytest.approx(timeout, 0.5 * 0.875)  # pyright: ignore[reportUnknownMemberType]
 
-    @mock.patch("stl_workshop_scale_20241031._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("scale_workshop._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     async def test_retrying_timeout_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
-        respx_mock.post("/v4/evaluation-datasets").mock(side_effect=httpx.TimeoutException("Test timeout error"))
+        respx_mock.get("/v4/evaluation-datasets").mock(side_effect=httpx.TimeoutException("Test timeout error"))
 
         with pytest.raises(APITimeoutError):
-            await self.client.post(
-                "/v4/evaluation-datasets",
-                body=cast(object, dict(account_id="account_id", name="name", schema_type="GENERATION", type="manual")),
-                cast_to=httpx.Response,
-                options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
+            await self.client.get(
+                "/v4/evaluation-datasets", cast_to=httpx.Response, options={"headers": {RAW_RESPONSE_HEADER: "stream"}}
             )
 
         assert _get_open_connections(self.client) == 0
 
-    @mock.patch("stl_workshop_scale_20241031._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("scale_workshop._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     async def test_retrying_status_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
-        respx_mock.post("/v4/evaluation-datasets").mock(return_value=httpx.Response(500))
+        respx_mock.get("/v4/evaluation-datasets").mock(return_value=httpx.Response(500))
 
         with pytest.raises(APIStatusError):
-            await self.client.post(
-                "/v4/evaluation-datasets",
-                body=cast(object, dict(account_id="account_id", name="name", schema_type="GENERATION", type="manual")),
-                cast_to=httpx.Response,
-                options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
+            await self.client.get(
+                "/v4/evaluation-datasets", cast_to=httpx.Response, options={"headers": {RAW_RESPONSE_HEADER: "stream"}}
             )
 
         assert _get_open_connections(self.client) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("stl_workshop_scale_20241031._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("scale_workshop._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.asyncio
     @pytest.mark.parametrize("failure_mode", ["status", "exception"])
     async def test_retries_taken(
         self,
-        async_client: AsyncStlWorkshopScale20241031,
+        async_client: AsyncScaleWorkshop,
         failures_before_success: int,
         failure_mode: Literal["status", "exception"],
         respx_mock: MockRouter,
@@ -1509,21 +1447,19 @@ class TestAsyncStlWorkshopScale20241031:
                 return httpx.Response(500)
             return httpx.Response(200)
 
-        respx_mock.post("/v4/evaluation-datasets").mock(side_effect=retry_handler)
+        respx_mock.get("/v4/evaluation-datasets").mock(side_effect=retry_handler)
 
-        response = await client.evaluation_datasets.with_raw_response.create(
-            account_id="account_id", name="name", schema_type="GENERATION", type="manual"
-        )
+        response = await client.my_resource_name.with_raw_response.my_method()
 
         assert response.retries_taken == failures_before_success
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("stl_workshop_scale_20241031._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("scale_workshop._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.asyncio
     async def test_omit_retry_count_header(
-        self, async_client: AsyncStlWorkshopScale20241031, failures_before_success: int, respx_mock: MockRouter
+        self, async_client: AsyncScaleWorkshop, failures_before_success: int, respx_mock: MockRouter
     ) -> None:
         client = async_client.with_options(max_retries=4)
 
@@ -1536,24 +1472,20 @@ class TestAsyncStlWorkshopScale20241031:
                 return httpx.Response(500)
             return httpx.Response(200)
 
-        respx_mock.post("/v4/evaluation-datasets").mock(side_effect=retry_handler)
+        respx_mock.get("/v4/evaluation-datasets").mock(side_effect=retry_handler)
 
-        response = await client.evaluation_datasets.with_raw_response.create(
-            account_id="account_id",
-            name="name",
-            schema_type="GENERATION",
-            type="manual",
-            extra_headers={"x-stainless-retry-count": Omit()},
+        response = await client.my_resource_name.with_raw_response.my_method(
+            extra_headers={"x-stainless-retry-count": Omit()}
         )
 
         assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("stl_workshop_scale_20241031._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("scale_workshop._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.asyncio
     async def test_overwrite_retry_count_header(
-        self, async_client: AsyncStlWorkshopScale20241031, failures_before_success: int, respx_mock: MockRouter
+        self, async_client: AsyncScaleWorkshop, failures_before_success: int, respx_mock: MockRouter
     ) -> None:
         client = async_client.with_options(max_retries=4)
 
@@ -1566,14 +1498,10 @@ class TestAsyncStlWorkshopScale20241031:
                 return httpx.Response(500)
             return httpx.Response(200)
 
-        respx_mock.post("/v4/evaluation-datasets").mock(side_effect=retry_handler)
+        respx_mock.get("/v4/evaluation-datasets").mock(side_effect=retry_handler)
 
-        response = await client.evaluation_datasets.with_raw_response.create(
-            account_id="account_id",
-            name="name",
-            schema_type="GENERATION",
-            type="manual",
-            extra_headers={"x-stainless-retry-count": "42"},
+        response = await client.my_resource_name.with_raw_response.my_method(
+            extra_headers={"x-stainless-retry-count": "42"}
         )
 
         assert response.http_request.headers.get("x-stainless-retry-count") == "42"

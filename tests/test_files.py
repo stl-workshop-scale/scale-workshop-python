@@ -4,7 +4,7 @@ import anyio
 import pytest
 from dirty_equals import IsDict, IsList, IsBytes, IsTuple
 
-from stl_workshop_scale_20241031._files import to_httpx_files, async_to_httpx_files
+from scale_workshop._files import to_httpx_files, async_to_httpx_files
 
 readme_path = Path(__file__).parent.parent.joinpath("README.md")
 

@@ -4,8 +4,8 @@ from typing import Sequence
 
 import pytest
 
-from stl_workshop_scale_20241031._types import FileTypes
-from stl_workshop_scale_20241031._utils import extract_files
+from scale_workshop._types import FileTypes
+from scale_workshop._utils import extract_files
 
 
 def test_removes_files_from_input() -> None:

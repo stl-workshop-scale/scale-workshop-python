@@ -7,14 +7,14 @@ from typing import TYPE_CHECKING, Iterator, AsyncIterator
 import pytest
 from pytest_asyncio import is_async_test
 
-from stl_workshop_scale_20241031 import StlWorkshopScale20241031, AsyncStlWorkshopScale20241031
+from scale_workshop import ScaleWorkshop, AsyncScaleWorkshop
 
 if TYPE_CHECKING:
     from _pytest.fixtures import FixtureRequest
 
 pytest.register_assert_rewrite("tests.utils")
 
-logging.getLogger("stl_workshop_scale_20241031").setLevel(logging.DEBUG)
+logging.getLogger("scale_workshop").setLevel(logging.DEBUG)
 
 
 # automatically add `pytest.mark.asyncio()` to all of our async tests
@@ -30,20 +30,20 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
 
 @pytest.fixture(scope="session")
-def client(request: FixtureRequest) -> Iterator[StlWorkshopScale20241031]:
+def client(request: FixtureRequest) -> Iterator[ScaleWorkshop]:
     strict = getattr(request, "param", True)
     if not isinstance(strict, bool):
         raise TypeError(f"Unexpected fixture parameter type {type(strict)}, expected {bool}")
 
-    with StlWorkshopScale20241031(base_url=base_url, _strict_response_validation=strict) as client:
+    with ScaleWorkshop(base_url=base_url, _strict_response_validation=strict) as client:
         yield client
 
 
 @pytest.fixture(scope="session")
-async def async_client(request: FixtureRequest) -> AsyncIterator[AsyncStlWorkshopScale20241031]:
+async def async_client(request: FixtureRequest) -> AsyncIterator[AsyncScaleWorkshop]:
     strict = getattr(request, "param", True)
     if not isinstance(strict, bool):
         raise TypeError(f"Unexpected fixture parameter type {type(strict)}, expected {bool}")
 
-    async with AsyncStlWorkshopScale20241031(base_url=base_url, _strict_response_validation=strict) as client:
+    async with AsyncScaleWorkshop(base_url=base_url, _strict_response_validation=strict) as client:
         yield client

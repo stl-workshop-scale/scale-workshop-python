@@ -4,7 +4,7 @@ from urllib.parse import unquote
 
 import pytest
 
-from stl_workshop_scale_20241031._qs import Querystring, stringify
+from scale_workshop._qs import Querystring, stringify
 
 
 def test_empty() -> None:

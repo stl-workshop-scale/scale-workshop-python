@@ -1,4 +1,4 @@
-from stl_workshop_scale_20241031._utils import deepcopy_minimal
+from scale_workshop._utils import deepcopy_minimal
 
 
 def assert_different_identities(obj1: object, obj2: object) -> None:
