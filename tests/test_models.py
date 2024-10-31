@@ -7,9 +7,9 @@ import pytest
 import pydantic
 from pydantic import Field
 
-from stl_workshop_scale_20241031._utils import PropertyInfo
-from stl_workshop_scale_20241031._compat import PYDANTIC_V2, parse_obj, model_dump, model_json
-from stl_workshop_scale_20241031._models import BaseModel, construct_type
+from scale_workshop._utils import PropertyInfo
+from scale_workshop._compat import PYDANTIC_V2, parse_obj, model_dump, model_json
+from scale_workshop._models import BaseModel, construct_type
 
 
 class BasicModel(BaseModel):

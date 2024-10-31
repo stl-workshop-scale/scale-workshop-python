@@ -8,15 +8,15 @@ from typing_extensions import Required, Annotated, TypedDict
 
 import pytest
 
-from stl_workshop_scale_20241031._types import Base64FileInput
-from stl_workshop_scale_20241031._utils import (
+from scale_workshop._types import Base64FileInput
+from scale_workshop._utils import (
     PropertyInfo,
     transform as _transform,
     parse_datetime,
     async_transform as _async_transform,
 )
-from stl_workshop_scale_20241031._compat import PYDANTIC_V2
-from stl_workshop_scale_20241031._models import BaseModel
+from scale_workshop._compat import PYDANTIC_V2
+from scale_workshop._models import BaseModel
 
 _T = TypeVar("_T")
 

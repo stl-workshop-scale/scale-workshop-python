@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Generic, TypeVar, cast
 
-from stl_workshop_scale_20241031._utils import extract_type_var_from_base
+from scale_workshop._utils import extract_type_var_from_base
 
 _T = TypeVar("_T")
 _T2 = TypeVar("_T2")
