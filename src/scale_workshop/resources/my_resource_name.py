@@ -33,7 +33,7 @@ class MyResourceNameResource(SyncAPIResource):
         This property can be used as a prefix for any HTTP method call to return the
         the raw response object instead of the parsed content.
 
-        For more information, see https://www.github.com/stainless-sdks/stl-workshop-scale-20241031-python#accessing-raw-response-data-eg-headers
+        For more information, see https://www.github.com/stl-workshop-scale/scale-workshop-python#accessing-raw-response-data-eg-headers
         """
         return MyResourceNameResourceWithRawResponse(self)
 
@@ -42,7 +42,7 @@ class MyResourceNameResource(SyncAPIResource):
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
-        For more information, see https://www.github.com/stainless-sdks/stl-workshop-scale-20241031-python#with_streaming_response
+        For more information, see https://www.github.com/stl-workshop-scale/scale-workshop-python#with_streaming_response
         """
         return MyResourceNameResourceWithStreamingResponse(self)
 
@@ -114,7 +114,7 @@ class AsyncMyResourceNameResource(AsyncAPIResource):
         This property can be used as a prefix for any HTTP method call to return the
         the raw response object instead of the parsed content.
 
-        For more information, see https://www.github.com/stainless-sdks/stl-workshop-scale-20241031-python#accessing-raw-response-data-eg-headers
+        For more information, see https://www.github.com/stl-workshop-scale/scale-workshop-python#accessing-raw-response-data-eg-headers
         """
         return AsyncMyResourceNameResourceWithRawResponse(self)
 
@@ -123,7 +123,7 @@ class AsyncMyResourceNameResource(AsyncAPIResource):
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
-        For more information, see https://www.github.com/stainless-sdks/stl-workshop-scale-20241031-python#with_streaming_response
+        For more information, see https://www.github.com/stl-workshop-scale/scale-workshop-python#with_streaming_response
         """
         return AsyncMyResourceNameResourceWithStreamingResponse(self)
 
