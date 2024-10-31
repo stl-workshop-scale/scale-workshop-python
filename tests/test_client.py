@@ -21,7 +21,7 @@ from scale_workshop import ScaleWorkshop, AsyncScaleWorkshop, APIResponseValidat
 from scale_workshop._types import Omit
 from scale_workshop._models import BaseModel, FinalRequestOptions
 from scale_workshop._constants import RAW_RESPONSE_HEADER
-from scale_workshop._exceptions import APIStatusError, APITimeoutError, APIResponseValidationError
+from scale_workshop._exceptions import APIStatusError, APITimeoutError, ScaleWorkshopError, APIResponseValidationError
 from scale_workshop._base_client import (
     DEFAULT_TIMEOUT,
     HTTPX_DEFAULT_TIMEOUT,
@@ -329,6 +329,16 @@ class TestScaleWorkshop:
         request = client2._build_request(FinalRequestOptions(method="get", url="/foo"))
         assert request.headers.get("x-foo") == "stainless"
         assert request.headers.get("x-stainless-lang") == "my-overriding-header"
+
+    def test_validate_headers(self) -> None:
+        client = ScaleWorkshop(base_url=base_url, api_key=api_key, _strict_response_validation=True)
+        request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
+        assert request.headers.get("Authorization") == f"Bearer {api_key}"
+
+        with pytest.raises(ScaleWorkshopError):
+            with update_env(**{"AWESOME_COMPANY_API_KEY": Omit()}):
+                client2 = ScaleWorkshop(base_url=base_url, api_key=None, _strict_response_validation=True)
+            _ = client2
 
     def test_default_query_option(self) -> None:
         client = ScaleWorkshop(
@@ -1105,6 +1115,16 @@ class TestAsyncScaleWorkshop:
         request = client2._build_request(FinalRequestOptions(method="get", url="/foo"))
         assert request.headers.get("x-foo") == "stainless"
         assert request.headers.get("x-stainless-lang") == "my-overriding-header"
+
+    def test_validate_headers(self) -> None:
+        client = AsyncScaleWorkshop(base_url=base_url, api_key=api_key, _strict_response_validation=True)
+        request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
+        assert request.headers.get("Authorization") == f"Bearer {api_key}"
+
+        with pytest.raises(ScaleWorkshopError):
+            with update_env(**{"AWESOME_COMPANY_API_KEY": Omit()}):
+                client2 = AsyncScaleWorkshop(base_url=base_url, api_key=None, _strict_response_validation=True)
+            _ = client2
 
     def test_default_query_option(self) -> None:
         client = AsyncScaleWorkshop(
