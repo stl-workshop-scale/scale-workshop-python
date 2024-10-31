@@ -34,4 +34,4 @@ class FlexibleTestCaseVersion(BaseModel):
     archived_at: Optional[datetime] = None
     """The date and time when the entity was archived in ISO format."""
 
-    schema_type: Optional[Literal["FLEXIBLE"]] = None
+    kind_schema: Optional[Literal["FLEXIBLE"]] = None

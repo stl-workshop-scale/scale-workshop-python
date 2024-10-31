@@ -10,5 +10,5 @@ from .generation_test_case_version import GenerationTestCaseVersion
 __all__ = ["TestCase"]
 
 TestCase: TypeAlias = Annotated[
-    Union[GenerationTestCaseVersion, FlexibleTestCaseVersion], PropertyInfo(discriminator="schema_type")
+    Union[GenerationTestCaseVersion, FlexibleTestCaseVersion], PropertyInfo(discriminator="kind_schema")
 ]

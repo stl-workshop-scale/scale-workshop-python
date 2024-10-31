@@ -37,8 +37,8 @@ client = ScaleWorkshop(
 
 evaluation_dataset = client.evaluation_datasets.create(
     account_id="account_id",
+    kind_schema="GENERATION",
     name="name",
-    schema_type="GENERATION",
     type="manual",
 )
 print(evaluation_dataset.id)
@@ -67,8 +67,8 @@ client = AsyncScaleWorkshop(
 async def main() -> None:
     evaluation_dataset = await client.evaluation_datasets.create(
         account_id="account_id",
+        kind_schema="GENERATION",
         name="name",
-        schema_type="GENERATION",
         type="manual",
     )
     print(evaluation_dataset.id)
@@ -169,8 +169,8 @@ client = ScaleWorkshop()
 try:
     client.evaluation_datasets.create(
         account_id="account_id",
+        kind_schema="GENERATION",
         name="name",
-        schema_type="GENERATION",
         type="manual",
     )
 except scale_workshop.APIConnectionError as e:
@@ -217,8 +217,8 @@ client = ScaleWorkshop(
 # Or, configure per-request:
 client.with_options(max_retries=5).evaluation_datasets.create(
     account_id="account_id",
+    kind_schema="GENERATION",
     name="name",
-    schema_type="GENERATION",
     type="manual",
 )
 ```
@@ -245,8 +245,8 @@ client = ScaleWorkshop(
 # Override per-request:
 client.with_options(timeout=5.0).evaluation_datasets.create(
     account_id="account_id",
+    kind_schema="GENERATION",
     name="name",
-    schema_type="GENERATION",
     type="manual",
 )
 ```
@@ -289,8 +289,8 @@ from scale_workshop import ScaleWorkshop
 client = ScaleWorkshop()
 response = client.evaluation_datasets.with_raw_response.create(
     account_id="account_id",
+    kind_schema="GENERATION",
     name="name",
-    schema_type="GENERATION",
     type="manual",
 )
 print(response.headers.get('X-My-Header'))
@@ -312,8 +312,8 @@ To stream the response body, use `.with_streaming_response` instead, which requi
 ```python
 with client.evaluation_datasets.with_streaming_response.create(
     account_id="account_id",
+    kind_schema="GENERATION",
     name="name",
-    schema_type="GENERATION",
     type="manual",
 ) as response:
     print(response.headers.get("X-My-Header"))
