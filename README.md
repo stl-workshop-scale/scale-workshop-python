@@ -20,7 +20,7 @@ pip install git+ssh://git@github.com/stl-workshop-scale/scale-workshop-python.gi
 ```
 
 > [!NOTE]
-> Once this package is [published to PyPI](https://app.stainlessapi.com/docs/guides/publish), this will become: `pip install --pre scale_workshop`
+> Once this package is [published to PyPI](https://app.stainlessapi.com/docs/guides/publish), this will become: `pip install scale_workshop`
 
 ## Usage
 
