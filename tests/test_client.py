@@ -723,7 +723,7 @@ class TestScaleWorkshop:
         with pytest.raises(APITimeoutError):
             self.client.post(
                 "/v4/evaluation-datasets",
-                body=cast(object, dict(account_id="account_id", name="name", schema_type="GENERATION", type="manual")),
+                body=cast(object, dict(account_id="account_id", kind_schema="GENERATION", name="name", type="manual")),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
             )
@@ -738,7 +738,7 @@ class TestScaleWorkshop:
         with pytest.raises(APIStatusError):
             self.client.post(
                 "/v4/evaluation-datasets",
-                body=cast(object, dict(account_id="account_id", name="name", schema_type="GENERATION", type="manual")),
+                body=cast(object, dict(account_id="account_id", kind_schema="GENERATION", name="name", type="manual")),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
             )
@@ -772,7 +772,7 @@ class TestScaleWorkshop:
         respx_mock.post("/v4/evaluation-datasets").mock(side_effect=retry_handler)
 
         response = client.evaluation_datasets.with_raw_response.create(
-            account_id="account_id", name="name", schema_type="GENERATION", type="manual"
+            account_id="account_id", kind_schema="GENERATION", name="name", type="manual"
         )
 
         assert response.retries_taken == failures_before_success
@@ -799,8 +799,8 @@ class TestScaleWorkshop:
 
         response = client.evaluation_datasets.with_raw_response.create(
             account_id="account_id",
+            kind_schema="GENERATION",
             name="name",
-            schema_type="GENERATION",
             type="manual",
             extra_headers={"x-stainless-retry-count": Omit()},
         )
@@ -828,8 +828,8 @@ class TestScaleWorkshop:
 
         response = client.evaluation_datasets.with_raw_response.create(
             account_id="account_id",
+            kind_schema="GENERATION",
             name="name",
-            schema_type="GENERATION",
             type="manual",
             extra_headers={"x-stainless-retry-count": "42"},
         )
@@ -1513,7 +1513,7 @@ class TestAsyncScaleWorkshop:
         with pytest.raises(APITimeoutError):
             await self.client.post(
                 "/v4/evaluation-datasets",
-                body=cast(object, dict(account_id="account_id", name="name", schema_type="GENERATION", type="manual")),
+                body=cast(object, dict(account_id="account_id", kind_schema="GENERATION", name="name", type="manual")),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
             )
@@ -1528,7 +1528,7 @@ class TestAsyncScaleWorkshop:
         with pytest.raises(APIStatusError):
             await self.client.post(
                 "/v4/evaluation-datasets",
-                body=cast(object, dict(account_id="account_id", name="name", schema_type="GENERATION", type="manual")),
+                body=cast(object, dict(account_id="account_id", kind_schema="GENERATION", name="name", type="manual")),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
             )
@@ -1563,7 +1563,7 @@ class TestAsyncScaleWorkshop:
         respx_mock.post("/v4/evaluation-datasets").mock(side_effect=retry_handler)
 
         response = await client.evaluation_datasets.with_raw_response.create(
-            account_id="account_id", name="name", schema_type="GENERATION", type="manual"
+            account_id="account_id", kind_schema="GENERATION", name="name", type="manual"
         )
 
         assert response.retries_taken == failures_before_success
@@ -1591,8 +1591,8 @@ class TestAsyncScaleWorkshop:
 
         response = await client.evaluation_datasets.with_raw_response.create(
             account_id="account_id",
+            kind_schema="GENERATION",
             name="name",
-            schema_type="GENERATION",
             type="manual",
             extra_headers={"x-stainless-retry-count": Omit()},
         )
@@ -1621,8 +1621,8 @@ class TestAsyncScaleWorkshop:
 
         response = await client.evaluation_datasets.with_raw_response.create(
             account_id="account_id",
+            kind_schema="GENERATION",
             name="name",
-            schema_type="GENERATION",
             type="manual",
             extra_headers={"x-stainless-retry-count": "42"},
         )

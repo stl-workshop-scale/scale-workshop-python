@@ -54,11 +54,11 @@ class EvaluationDatasetListResponse(BaseModel):
     created_by_user_id: str
     """The user who originally created the entity."""
 
+    kind_schema: Literal["GENERATION", "FLEXIBLE"]
+    """The schema type of the dataset."""
+
     name: str
     """The name of the dataset"""
-
-    schema_type: Literal["GENERATION", "FLEXIBLE"]
-    """The schema type of the dataset."""
 
     updated_at: datetime
     """The date and time when the entity was last updated in ISO format."""
