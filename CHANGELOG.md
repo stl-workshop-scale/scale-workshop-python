@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.3 (2024-10-31)
+
+Full Changelog: [v0.1.0-alpha.1...v1.2.3](https://github.com/stl-workshop-scale/scale-workshop-python/compare/v0.1.0-alpha.1...v1.2.3)
+
+### Features
+
+* **api:** manual updates ([#7](https://github.com/stl-workshop-scale/scale-workshop-python/issues/7)) ([b686716](https://github.com/stl-workshop-scale/scale-workshop-python/commit/b6867161bde967d698d477774a57af4d2787e882))
+
 ## 0.1.0-alpha.1 (2024-10-31)
 
 Full Changelog: [v0.0.1-alpha.0...v0.1.0-alpha.1](https://github.com/stl-workshop-scale/scale-workshop-python/compare/v0.0.1-alpha.0...v0.1.0-alpha.1)
