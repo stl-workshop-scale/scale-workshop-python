@@ -10,4 +10,4 @@ __all__ = ["StringExtraInfoSchema"]
 class StringExtraInfoSchema(TypedDict, total=False):
     info: Required[str]
 
-    schema_type: Literal["STRING"]
+    kind_schema: Literal["STRING"]

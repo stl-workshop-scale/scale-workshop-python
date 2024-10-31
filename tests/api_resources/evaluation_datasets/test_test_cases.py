@@ -42,7 +42,7 @@ class TestTestCases:
                 "input": "input",
                 "expected_extra_info": {
                     "info": "info",
-                    "schema_type": "STRING",
+                    "kind_schema": "STRING",
                 },
                 "expected_output": "expected_output",
             },
@@ -170,7 +170,7 @@ class TestTestCases:
                 "input": "input",
                 "expected_extra_info": {
                     "info": "info",
-                    "schema_type": "STRING",
+                    "kind_schema": "STRING",
                 },
                 "expected_output": "expected_output",
             },
@@ -426,7 +426,7 @@ class TestTestCases:
                         "input": "input",
                         "expected_extra_info": {
                             "info": "info",
-                            "schema_type": "STRING",
+                            "kind_schema": "STRING",
                         },
                         "expected_output": "expected_output",
                     },
@@ -438,7 +438,7 @@ class TestTestCases:
                         "input": "input",
                         "expected_extra_info": {
                             "info": "info",
-                            "schema_type": "STRING",
+                            "kind_schema": "STRING",
                         },
                         "expected_output": "expected_output",
                     },
@@ -450,7 +450,7 @@ class TestTestCases:
                         "input": "input",
                         "expected_extra_info": {
                             "info": "info",
-                            "schema_type": "STRING",
+                            "kind_schema": "STRING",
                         },
                         "expected_output": "expected_output",
                     },
@@ -575,7 +575,7 @@ class TestAsyncTestCases:
                 "input": "input",
                 "expected_extra_info": {
                     "info": "info",
-                    "schema_type": "STRING",
+                    "kind_schema": "STRING",
                 },
                 "expected_output": "expected_output",
             },
@@ -703,7 +703,7 @@ class TestAsyncTestCases:
                 "input": "input",
                 "expected_extra_info": {
                     "info": "info",
-                    "schema_type": "STRING",
+                    "kind_schema": "STRING",
                 },
                 "expected_output": "expected_output",
             },
@@ -959,7 +959,7 @@ class TestAsyncTestCases:
                         "input": "input",
                         "expected_extra_info": {
                             "info": "info",
-                            "schema_type": "STRING",
+                            "kind_schema": "STRING",
                         },
                         "expected_output": "expected_output",
                     },
@@ -971,7 +971,7 @@ class TestAsyncTestCases:
                         "input": "input",
                         "expected_extra_info": {
                             "info": "info",
-                            "schema_type": "STRING",
+                            "kind_schema": "STRING",
                         },
                         "expected_output": "expected_output",
                     },
@@ -983,7 +983,7 @@ class TestAsyncTestCases:
                         "input": "input",
                         "expected_extra_info": {
                             "info": "info",
-                            "schema_type": "STRING",
+                            "kind_schema": "STRING",
                         },
                         "expected_output": "expected_output",
                     },

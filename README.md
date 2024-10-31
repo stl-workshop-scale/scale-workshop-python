@@ -20,7 +20,7 @@ pip install git+ssh://git@github.com/stl-workshop-scale/scale-workshop-python.gi
 ```
 
 > [!NOTE]
-> Once this package is [published to PyPI](https://app.stainlessapi.com/docs/guides/publish), this will become: `pip install --pre scale_workshop`
+> Once this package is [published to PyPI](https://app.stainlessapi.com/docs/guides/publish), this will become: `pip install scale_workshop`
 
 ## Usage
 
@@ -35,13 +35,8 @@ client = ScaleWorkshop(
     api_key=os.environ.get("AWESOME_COMPANY_API_KEY"),
 )
 
-evaluation_dataset = client.evaluation_datasets.create(
-    account_id="account_id",
-    name="name",
-    schema_type="GENERATION",
-    type="manual",
-)
-print(evaluation_dataset.id)
+page = client.evaluation_datasets.list()
+print(page.page)
 ```
 
 While you can provide an `api_key` keyword argument,
@@ -65,13 +60,8 @@ client = AsyncScaleWorkshop(
 
 
 async def main() -> None:
-    evaluation_dataset = await client.evaluation_datasets.create(
-        account_id="account_id",
-        name="name",
-        schema_type="GENERATION",
-        type="manual",
-    )
-    print(evaluation_dataset.id)
+    page = await client.evaluation_datasets.list()
+    print(page.page)
 
 
 asyncio.run(main())
@@ -167,12 +157,7 @@ from scale_workshop import ScaleWorkshop
 client = ScaleWorkshop()
 
 try:
-    client.evaluation_datasets.create(
-        account_id="account_id",
-        name="name",
-        schema_type="GENERATION",
-        type="manual",
-    )
+    client.evaluation_datasets.list()
 except scale_workshop.APIConnectionError as e:
     print("The server could not be reached")
     print(e.__cause__)  # an underlying Exception, likely raised within httpx.
@@ -215,12 +200,7 @@ client = ScaleWorkshop(
 )
 
 # Or, configure per-request:
-client.with_options(max_retries=5).evaluation_datasets.create(
-    account_id="account_id",
-    name="name",
-    schema_type="GENERATION",
-    type="manual",
-)
+client.with_options(max_retries=5).evaluation_datasets.list()
 ```
 
 ### Timeouts
@@ -243,12 +223,7 @@ client = ScaleWorkshop(
 )
 
 # Override per-request:
-client.with_options(timeout=5.0).evaluation_datasets.create(
-    account_id="account_id",
-    name="name",
-    schema_type="GENERATION",
-    type="manual",
-)
+client.with_options(timeout=5.0).evaluation_datasets.list()
 ```
 
 On timeout, an `APITimeoutError` is thrown.
@@ -287,15 +262,10 @@ The "raw" Response object can be accessed by prefixing `.with_raw_response.` to 
 from scale_workshop import ScaleWorkshop
 
 client = ScaleWorkshop()
-response = client.evaluation_datasets.with_raw_response.create(
-    account_id="account_id",
-    name="name",
-    schema_type="GENERATION",
-    type="manual",
-)
+response = client.evaluation_datasets.with_raw_response.list()
 print(response.headers.get('X-My-Header'))
 
-evaluation_dataset = response.parse()  # get the object that `evaluation_datasets.create()` would have returned
+evaluation_dataset = response.parse()  # get the object that `evaluation_datasets.list()` would have returned
 print(evaluation_dataset.id)
 ```
 
@@ -310,12 +280,7 @@ The above interface eagerly reads the full response body when you make the reque
 To stream the response body, use `.with_streaming_response` instead, which requires a context manager and only reads the response body once you call `.read()`, `.text()`, `.json()`, `.iter_bytes()`, `.iter_text()`, `.iter_lines()` or `.parse()`. In the async client, these are async methods.
 
 ```python
-with client.evaluation_datasets.with_streaming_response.create(
-    account_id="account_id",
-    name="name",
-    schema_type="GENERATION",
-    type="manual",
-) as response:
+with client.evaluation_datasets.with_streaming_response.list() as response:
     print(response.headers.get("X-My-Header"))
 
     for line in response.iter_lines():
