@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.3.0 (2024-10-31)
+
+Full Changelog: [v1.2.3...v1.3.0](https://github.com/stl-workshop-scale/scale-workshop-python/compare/v1.2.3...v1.3.0)
+
+### Features
+
+* feat: set default param for evaluation dataset `schema_type` ([48d3706](https://github.com/stl-workshop-scale/scale-workshop-python/commit/48d37063b2b62e453ced0c244c42303cefa4b149))
+* feat(resource): use schema_kind ([0347091](https://github.com/stl-workshop-scale/scale-workshop-python/commit/0347091d215eee5c9dcb45c16b34f9b91e68990a))
+* update evaluation dataset docs ([4dea2a8](https://github.com/stl-workshop-scale/scale-workshop-python/commit/4dea2a82b9f6f857a0394dbe017615622bff6337))
+
 ## 1.2.3 (2024-10-31)
 
 Full Changelog: [v0.1.0-alpha.1...v1.2.3](https://github.com/stl-workshop-scale/scale-workshop-python/compare/v0.1.0-alpha.1...v1.2.3)
