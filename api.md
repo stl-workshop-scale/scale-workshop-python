@@ -17,7 +17,6 @@ Types:
 
 ```python
 from scale_workshop.types import (
-    EvaluationDatasetCreateResponse,
     EvaluationDatasetRetrieveResponse,
     EvaluationDatasetUpdateResponse,
     EvaluationDatasetListResponse,
@@ -29,7 +28,6 @@ from scale_workshop.types import (
 
 Methods:
 
-- <code title="post /v4/evaluation-datasets">client.evaluation_datasets.<a href="./src/scale_workshop/resources/evaluation_datasets/evaluation_datasets.py">create</a>(\*\*<a href="src/scale_workshop/types/evaluation_dataset_create_params.py">params</a>) -> <a href="./src/scale_workshop/types/evaluation_dataset_create_response.py">EvaluationDatasetCreateResponse</a></code>
 - <code title="get /v4/evaluation-datasets/{evaluation_dataset_id}">client.evaluation_datasets.<a href="./src/scale_workshop/resources/evaluation_datasets/evaluation_datasets.py">retrieve</a>(evaluation_dataset_id) -> <a href="./src/scale_workshop/types/evaluation_dataset_retrieve_response.py">EvaluationDatasetRetrieveResponse</a></code>
 - <code title="patch /v4/evaluation-datasets/{evaluation_dataset_id}">client.evaluation_datasets.<a href="./src/scale_workshop/resources/evaluation_datasets/evaluation_datasets.py">update</a>(evaluation_dataset_id, \*\*<a href="src/scale_workshop/types/evaluation_dataset_update_params.py">params</a>) -> <a href="./src/scale_workshop/types/evaluation_dataset_update_response.py">EvaluationDatasetUpdateResponse</a></code>
 - <code title="get /v4/evaluation-datasets">client.evaluation_datasets.<a href="./src/scale_workshop/resources/evaluation_datasets/evaluation_datasets.py">list</a>(\*\*<a href="src/scale_workshop/types/evaluation_dataset_list_params.py">params</a>) -> <a href="./src/scale_workshop/types/evaluation_dataset_list_response.py">SyncPageNumberPage[EvaluationDatasetListResponse]</a></code>
