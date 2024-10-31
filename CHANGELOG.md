@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.4.0 (2024-10-31)
+
+Full Changelog: [v1.3.0...v1.4.0](https://github.com/stl-workshop-scale/scale-workshop-python/compare/v1.3.0...v1.4.0)
+
+### Features
+
+* **api:** manual updates ([#14](https://github.com/stl-workshop-scale/scale-workshop-python/issues/14)) ([e9f05fa](https://github.com/stl-workshop-scale/scale-workshop-python/commit/e9f05fa4635c38328d5e444aacefb2480253f727))
+* **api:** manual updates ([#16](https://github.com/stl-workshop-scale/scale-workshop-python/issues/16)) ([900a4a3](https://github.com/stl-workshop-scale/scale-workshop-python/commit/900a4a34ba66caec032bec8507ed9be42cb2590e))
+* **api:** manual updates ([#17](https://github.com/stl-workshop-scale/scale-workshop-python/issues/17)) ([6a9ac7a](https://github.com/stl-workshop-scale/scale-workshop-python/commit/6a9ac7aaffdbb72c0efd9be7ecd068f6bc9f27aa))
+
+
+### Chores
+
+* remove custom code ([d2f8696](https://github.com/stl-workshop-scale/scale-workshop-python/commit/d2f8696c3f979381304b5b9a5e29bdcab7e34eb1))
+
 ## 1.3.0 (2024-10-31)
 
 Full Changelog: [v1.2.3...v1.3.0](https://github.com/stl-workshop-scale/scale-workshop-python/compare/v1.2.3...v1.3.0)
