@@ -89,15 +89,7 @@ class EvaluationDatasetsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> EvaluationDatasetCreateResponse:
         """
-        ### Description
-
-        Creates a evaluation dataset
-
-        ### Details
-
-        This API can be used to create a evaluation dataset. To use this API, review the
-        request schema and pass in all fields that are required to create a evaluation
-        dataset.
+        Create Evaluation Dataset
 
         Args:
           account_id: The ID of the account that owns the given entity.
@@ -135,15 +127,7 @@ class EvaluationDatasetsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> EvaluationDatasetCreateResponse:
         """
-        ### Description
-
-        Creates a evaluation dataset
-
-        ### Details
-
-        This API can be used to create a evaluation dataset. To use this API, review the
-        request schema and pass in all fields that are required to create a evaluation
-        dataset.
+        Create Evaluation Dataset
 
         Args:
           account_id: The ID of the account that owns the given entity.
@@ -184,15 +168,7 @@ class EvaluationDatasetsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> EvaluationDatasetCreateResponse:
         """
-        ### Description
-
-        Creates a evaluation dataset
-
-        ### Details
-
-        This API can be used to create a evaluation dataset. To use this API, review the
-        request schema and pass in all fields that are required to create a evaluation
-        dataset.
+        Create Evaluation Dataset
 
         Args:
           account_id: The ID of the account that owns the given entity.
@@ -649,15 +625,7 @@ class AsyncEvaluationDatasetsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> EvaluationDatasetCreateResponse:
         """
-        ### Description
-
-        Creates a evaluation dataset
-
-        ### Details
-
-        This API can be used to create a evaluation dataset. To use this API, review the
-        request schema and pass in all fields that are required to create a evaluation
-        dataset.
+        Create Evaluation Dataset
 
         Args:
           account_id: The ID of the account that owns the given entity.
@@ -695,15 +663,7 @@ class AsyncEvaluationDatasetsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> EvaluationDatasetCreateResponse:
         """
-        ### Description
-
-        Creates a evaluation dataset
-
-        ### Details
-
-        This API can be used to create a evaluation dataset. To use this API, review the
-        request schema and pass in all fields that are required to create a evaluation
-        dataset.
+        Create Evaluation Dataset
 
         Args:
           account_id: The ID of the account that owns the given entity.
@@ -744,15 +704,7 @@ class AsyncEvaluationDatasetsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> EvaluationDatasetCreateResponse:
         """
-        ### Description
-
-        Creates a evaluation dataset
-
-        ### Details
-
-        This API can be used to create a evaluation dataset. To use this API, review the
-        request schema and pass in all fields that are required to create a evaluation
-        dataset.
+        Create Evaluation Dataset
 
         Args:
           account_id: The ID of the account that owns the given entity.
