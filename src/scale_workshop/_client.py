@@ -25,7 +25,7 @@ from ._utils import (
 )
 from ._version import __version__
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
-from ._exceptions import APIStatusError
+from ._exceptions import APIStatusError, ScaleWorkshopError
 from ._base_client import (
     DEFAULT_MAX_RETRIES,
     SyncAPIClient,
@@ -46,15 +46,18 @@ __all__ = [
 
 
 class ScaleWorkshop(SyncAPIClient):
-    my_resource_name: resources.MyResourceNameResource
+    evaluation_datasets: resources.EvaluationDatasetsResource
+    evaluation_datasets_test_cases: resources.EvaluationDatasetsTestCasesResource
     with_raw_response: ScaleWorkshopWithRawResponse
     with_streaming_response: ScaleWorkshopWithStreamedResponse
 
     # client options
+    api_key: str
 
     def __init__(
         self,
         *,
+        api_key: str | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: Union[float, Timeout, None, NotGiven] = NOT_GIVEN,
         max_retries: int = DEFAULT_MAX_RETRIES,
@@ -74,7 +77,18 @@ class ScaleWorkshop(SyncAPIClient):
         # part of our public interface in the future.
         _strict_response_validation: bool = False,
     ) -> None:
-        """Construct a new synchronous scale workshop client instance."""
+        """Construct a new synchronous scale workshop client instance.
+
+        This automatically infers the `api_key` argument from the `AWESOME_COMPANY_API_KEY` environment variable if it is not provided.
+        """
+        if api_key is None:
+            api_key = os.environ.get("AWESOME_COMPANY_API_KEY")
+        if api_key is None:
+            raise ScaleWorkshopError(
+                "The api_key client option must be set either by passing api_key to the client or by setting the AWESOME_COMPANY_API_KEY environment variable"
+            )
+        self.api_key = api_key
+
         if base_url is None:
             base_url = os.environ.get("SCALE_WORKSHOP_BASE_URL")
         if base_url is None:
@@ -91,7 +105,8 @@ class ScaleWorkshop(SyncAPIClient):
             _strict_response_validation=_strict_response_validation,
         )
 
-        self.my_resource_name = resources.MyResourceNameResource(self)
+        self.evaluation_datasets = resources.EvaluationDatasetsResource(self)
+        self.evaluation_datasets_test_cases = resources.EvaluationDatasetsTestCasesResource(self)
         self.with_raw_response = ScaleWorkshopWithRawResponse(self)
         self.with_streaming_response = ScaleWorkshopWithStreamedResponse(self)
 
@@ -112,6 +127,7 @@ class ScaleWorkshop(SyncAPIClient):
     def copy(
         self,
         *,
+        api_key: str | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: float | Timeout | None | NotGiven = NOT_GIVEN,
         http_client: httpx.Client | None = None,
@@ -145,6 +161,7 @@ class ScaleWorkshop(SyncAPIClient):
 
         http_client = http_client or self._client
         return self.__class__(
+            api_key=api_key or self.api_key,
             base_url=base_url or self.base_url,
             timeout=self.timeout if isinstance(timeout, NotGiven) else timeout,
             http_client=http_client,
@@ -193,15 +210,18 @@ class ScaleWorkshop(SyncAPIClient):
 
 
 class AsyncScaleWorkshop(AsyncAPIClient):
-    my_resource_name: resources.AsyncMyResourceNameResource
+    evaluation_datasets: resources.AsyncEvaluationDatasetsResource
+    evaluation_datasets_test_cases: resources.AsyncEvaluationDatasetsTestCasesResource
     with_raw_response: AsyncScaleWorkshopWithRawResponse
     with_streaming_response: AsyncScaleWorkshopWithStreamedResponse
 
     # client options
+    api_key: str
 
     def __init__(
         self,
         *,
+        api_key: str | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: Union[float, Timeout, None, NotGiven] = NOT_GIVEN,
         max_retries: int = DEFAULT_MAX_RETRIES,
@@ -221,7 +241,18 @@ class AsyncScaleWorkshop(AsyncAPIClient):
         # part of our public interface in the future.
         _strict_response_validation: bool = False,
     ) -> None:
-        """Construct a new async scale workshop client instance."""
+        """Construct a new async scale workshop client instance.
+
+        This automatically infers the `api_key` argument from the `AWESOME_COMPANY_API_KEY` environment variable if it is not provided.
+        """
+        if api_key is None:
+            api_key = os.environ.get("AWESOME_COMPANY_API_KEY")
+        if api_key is None:
+            raise ScaleWorkshopError(
+                "The api_key client option must be set either by passing api_key to the client or by setting the AWESOME_COMPANY_API_KEY environment variable"
+            )
+        self.api_key = api_key
+
         if base_url is None:
             base_url = os.environ.get("SCALE_WORKSHOP_BASE_URL")
         if base_url is None:
@@ -238,7 +269,8 @@ class AsyncScaleWorkshop(AsyncAPIClient):
             _strict_response_validation=_strict_response_validation,
         )
 
-        self.my_resource_name = resources.AsyncMyResourceNameResource(self)
+        self.evaluation_datasets = resources.AsyncEvaluationDatasetsResource(self)
+        self.evaluation_datasets_test_cases = resources.AsyncEvaluationDatasetsTestCasesResource(self)
         self.with_raw_response = AsyncScaleWorkshopWithRawResponse(self)
         self.with_streaming_response = AsyncScaleWorkshopWithStreamedResponse(self)
 
@@ -259,6 +291,7 @@ class AsyncScaleWorkshop(AsyncAPIClient):
     def copy(
         self,
         *,
+        api_key: str | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: float | Timeout | None | NotGiven = NOT_GIVEN,
         http_client: httpx.AsyncClient | None = None,
@@ -292,6 +325,7 @@ class AsyncScaleWorkshop(AsyncAPIClient):
 
         http_client = http_client or self._client
         return self.__class__(
+            api_key=api_key or self.api_key,
             base_url=base_url or self.base_url,
             timeout=self.timeout if isinstance(timeout, NotGiven) else timeout,
             http_client=http_client,
@@ -341,22 +375,36 @@ class AsyncScaleWorkshop(AsyncAPIClient):
 
 class ScaleWorkshopWithRawResponse:
     def __init__(self, client: ScaleWorkshop) -> None:
-        self.my_resource_name = resources.MyResourceNameResourceWithRawResponse(client.my_resource_name)
+        self.evaluation_datasets = resources.EvaluationDatasetsResourceWithRawResponse(client.evaluation_datasets)
+        self.evaluation_datasets_test_cases = resources.EvaluationDatasetsTestCasesResourceWithRawResponse(
+            client.evaluation_datasets_test_cases
+        )
 
 
 class AsyncScaleWorkshopWithRawResponse:
     def __init__(self, client: AsyncScaleWorkshop) -> None:
-        self.my_resource_name = resources.AsyncMyResourceNameResourceWithRawResponse(client.my_resource_name)
+        self.evaluation_datasets = resources.AsyncEvaluationDatasetsResourceWithRawResponse(client.evaluation_datasets)
+        self.evaluation_datasets_test_cases = resources.AsyncEvaluationDatasetsTestCasesResourceWithRawResponse(
+            client.evaluation_datasets_test_cases
+        )
 
 
 class ScaleWorkshopWithStreamedResponse:
     def __init__(self, client: ScaleWorkshop) -> None:
-        self.my_resource_name = resources.MyResourceNameResourceWithStreamingResponse(client.my_resource_name)
+        self.evaluation_datasets = resources.EvaluationDatasetsResourceWithStreamingResponse(client.evaluation_datasets)
+        self.evaluation_datasets_test_cases = resources.EvaluationDatasetsTestCasesResourceWithStreamingResponse(
+            client.evaluation_datasets_test_cases
+        )
 
 
 class AsyncScaleWorkshopWithStreamedResponse:
     def __init__(self, client: AsyncScaleWorkshop) -> None:
-        self.my_resource_name = resources.AsyncMyResourceNameResourceWithStreamingResponse(client.my_resource_name)
+        self.evaluation_datasets = resources.AsyncEvaluationDatasetsResourceWithStreamingResponse(
+            client.evaluation_datasets
+        )
+        self.evaluation_datasets_test_cases = resources.AsyncEvaluationDatasetsTestCasesResourceWithStreamingResponse(
+            client.evaluation_datasets_test_cases
+        )
 
 
 Client = ScaleWorkshop
