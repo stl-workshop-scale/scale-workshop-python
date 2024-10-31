@@ -160,8 +160,8 @@ class EvaluationDatasetsResource(SyncAPIResource):
         advanced_config: Dict[str, List[str]],
         harms_list: List[str],
         name: str,
-        schema_type: Literal["GENERATION"],
         type: Literal["safety"],
+        schema_type: Literal["GENERATION"] = "GENERATION",
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
