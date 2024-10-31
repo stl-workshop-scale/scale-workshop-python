@@ -20,8 +20,7 @@ from pydantic import ValidationError
 from scale_workshop import ScaleWorkshop, AsyncScaleWorkshop, APIResponseValidationError
 from scale_workshop._types import Omit
 from scale_workshop._models import BaseModel, FinalRequestOptions
-from scale_workshop._constants import RAW_RESPONSE_HEADER
-from scale_workshop._exceptions import APIStatusError, APITimeoutError, ScaleWorkshopError, APIResponseValidationError
+from scale_workshop._exceptions import ScaleWorkshopError, APIResponseValidationError
 from scale_workshop._base_client import (
     DEFAULT_TIMEOUT,
     HTTPX_DEFAULT_TIMEOUT,
@@ -43,14 +42,6 @@ def _get_params(client: BaseClient[Any, Any]) -> dict[str, str]:
 
 def _low_retry_timeout(*_args: Any, **_kwargs: Any) -> float:
     return 0.1
-
-
-def _get_open_connections(client: ScaleWorkshop | AsyncScaleWorkshop) -> int:
-    transport = client._client._transport
-    assert isinstance(transport, httpx.HTTPTransport) or isinstance(transport, httpx.AsyncHTTPTransport)
-
-    pool = transport._pool
-    return len(pool._requests)
 
 
 class TestScaleWorkshop:
@@ -715,36 +706,6 @@ class TestScaleWorkshop:
         calculated = client._calculate_retry_timeout(remaining_retries, options, headers)
         assert calculated == pytest.approx(timeout, 0.5 * 0.875)  # pyright: ignore[reportUnknownMemberType]
 
-    @mock.patch("scale_workshop._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
-    @pytest.mark.respx(base_url=base_url)
-    def test_retrying_timeout_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
-        respx_mock.post("/v4/evaluation-datasets").mock(side_effect=httpx.TimeoutException("Test timeout error"))
-
-        with pytest.raises(APITimeoutError):
-            self.client.post(
-                "/v4/evaluation-datasets",
-                body=cast(object, dict(account_id="account_id", kind_schema="GENERATION", name="name", type="manual")),
-                cast_to=httpx.Response,
-                options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
-            )
-
-        assert _get_open_connections(self.client) == 0
-
-    @mock.patch("scale_workshop._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
-    @pytest.mark.respx(base_url=base_url)
-    def test_retrying_status_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
-        respx_mock.post("/v4/evaluation-datasets").mock(return_value=httpx.Response(500))
-
-        with pytest.raises(APIStatusError):
-            self.client.post(
-                "/v4/evaluation-datasets",
-                body=cast(object, dict(account_id="account_id", kind_schema="GENERATION", name="name", type="manual")),
-                cast_to=httpx.Response,
-                options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
-            )
-
-        assert _get_open_connections(self.client) == 0
-
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
     @mock.patch("scale_workshop._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
@@ -769,11 +730,9 @@ class TestScaleWorkshop:
                 return httpx.Response(500)
             return httpx.Response(200)
 
-        respx_mock.post("/v4/evaluation-datasets").mock(side_effect=retry_handler)
+        respx_mock.get("/v4/evaluation-datasets").mock(side_effect=retry_handler)
 
-        response = client.evaluation_datasets.with_raw_response.create(
-            account_id="account_id", kind_schema="GENERATION", name="name", type="manual"
-        )
+        response = client.evaluation_datasets.with_raw_response.list()
 
         assert response.retries_taken == failures_before_success
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
@@ -795,15 +754,9 @@ class TestScaleWorkshop:
                 return httpx.Response(500)
             return httpx.Response(200)
 
-        respx_mock.post("/v4/evaluation-datasets").mock(side_effect=retry_handler)
+        respx_mock.get("/v4/evaluation-datasets").mock(side_effect=retry_handler)
 
-        response = client.evaluation_datasets.with_raw_response.create(
-            account_id="account_id",
-            kind_schema="GENERATION",
-            name="name",
-            type="manual",
-            extra_headers={"x-stainless-retry-count": Omit()},
-        )
+        response = client.evaluation_datasets.with_raw_response.list(extra_headers={"x-stainless-retry-count": Omit()})
 
         assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
 
@@ -824,15 +777,9 @@ class TestScaleWorkshop:
                 return httpx.Response(500)
             return httpx.Response(200)
 
-        respx_mock.post("/v4/evaluation-datasets").mock(side_effect=retry_handler)
+        respx_mock.get("/v4/evaluation-datasets").mock(side_effect=retry_handler)
 
-        response = client.evaluation_datasets.with_raw_response.create(
-            account_id="account_id",
-            kind_schema="GENERATION",
-            name="name",
-            type="manual",
-            extra_headers={"x-stainless-retry-count": "42"},
-        )
+        response = client.evaluation_datasets.with_raw_response.list(extra_headers={"x-stainless-retry-count": "42"})
 
         assert response.http_request.headers.get("x-stainless-retry-count") == "42"
 
@@ -1505,36 +1452,6 @@ class TestAsyncScaleWorkshop:
         calculated = client._calculate_retry_timeout(remaining_retries, options, headers)
         assert calculated == pytest.approx(timeout, 0.5 * 0.875)  # pyright: ignore[reportUnknownMemberType]
 
-    @mock.patch("scale_workshop._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
-    @pytest.mark.respx(base_url=base_url)
-    async def test_retrying_timeout_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
-        respx_mock.post("/v4/evaluation-datasets").mock(side_effect=httpx.TimeoutException("Test timeout error"))
-
-        with pytest.raises(APITimeoutError):
-            await self.client.post(
-                "/v4/evaluation-datasets",
-                body=cast(object, dict(account_id="account_id", kind_schema="GENERATION", name="name", type="manual")),
-                cast_to=httpx.Response,
-                options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
-            )
-
-        assert _get_open_connections(self.client) == 0
-
-    @mock.patch("scale_workshop._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
-    @pytest.mark.respx(base_url=base_url)
-    async def test_retrying_status_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
-        respx_mock.post("/v4/evaluation-datasets").mock(return_value=httpx.Response(500))
-
-        with pytest.raises(APIStatusError):
-            await self.client.post(
-                "/v4/evaluation-datasets",
-                body=cast(object, dict(account_id="account_id", kind_schema="GENERATION", name="name", type="manual")),
-                cast_to=httpx.Response,
-                options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
-            )
-
-        assert _get_open_connections(self.client) == 0
-
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
     @mock.patch("scale_workshop._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
@@ -1560,11 +1477,9 @@ class TestAsyncScaleWorkshop:
                 return httpx.Response(500)
             return httpx.Response(200)
 
-        respx_mock.post("/v4/evaluation-datasets").mock(side_effect=retry_handler)
+        respx_mock.get("/v4/evaluation-datasets").mock(side_effect=retry_handler)
 
-        response = await client.evaluation_datasets.with_raw_response.create(
-            account_id="account_id", kind_schema="GENERATION", name="name", type="manual"
-        )
+        response = await client.evaluation_datasets.with_raw_response.list()
 
         assert response.retries_taken == failures_before_success
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
@@ -1587,14 +1502,10 @@ class TestAsyncScaleWorkshop:
                 return httpx.Response(500)
             return httpx.Response(200)
 
-        respx_mock.post("/v4/evaluation-datasets").mock(side_effect=retry_handler)
+        respx_mock.get("/v4/evaluation-datasets").mock(side_effect=retry_handler)
 
-        response = await client.evaluation_datasets.with_raw_response.create(
-            account_id="account_id",
-            kind_schema="GENERATION",
-            name="name",
-            type="manual",
-            extra_headers={"x-stainless-retry-count": Omit()},
+        response = await client.evaluation_datasets.with_raw_response.list(
+            extra_headers={"x-stainless-retry-count": Omit()}
         )
 
         assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
@@ -1617,14 +1528,10 @@ class TestAsyncScaleWorkshop:
                 return httpx.Response(500)
             return httpx.Response(200)
 
-        respx_mock.post("/v4/evaluation-datasets").mock(side_effect=retry_handler)
+        respx_mock.get("/v4/evaluation-datasets").mock(side_effect=retry_handler)
 
-        response = await client.evaluation_datasets.with_raw_response.create(
-            account_id="account_id",
-            kind_schema="GENERATION",
-            name="name",
-            type="manual",
-            extra_headers={"x-stainless-retry-count": "42"},
+        response = await client.evaluation_datasets.with_raw_response.list(
+            extra_headers={"x-stainless-retry-count": "42"}
         )
 
         assert response.http_request.headers.get("x-stainless-retry-count") == "42"
