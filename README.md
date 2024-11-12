@@ -31,8 +31,7 @@ import os
 from scale_workshop import ScaleWorkshop
 
 client = ScaleWorkshop(
-    # This is the default and can be omitted
-    api_key=os.environ.get("AWESOME_COMPANY_API_KEY"),
+    api_key=os.environ.get("AWESOME_COMPANY_API_KEY"),  # This is the default and can be omitted
 )
 
 page = client.evaluation_datasets.list()
@@ -54,8 +53,7 @@ import asyncio
 from scale_workshop import AsyncScaleWorkshop
 
 client = AsyncScaleWorkshop(
-    # This is the default and can be omitted
-    api_key=os.environ.get("AWESOME_COMPANY_API_KEY"),
+    api_key=os.environ.get("AWESOME_COMPANY_API_KEY"),  # This is the default and can be omitted
 )
 
 
