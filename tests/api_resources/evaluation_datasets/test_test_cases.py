@@ -27,7 +27,7 @@ class TestTestCases:
         test_case = client.evaluation_datasets.test_cases.create(
             evaluation_dataset_id="evaluation_dataset_id",
             test_case_data={
-                "artifact_ids_filter": ["string", "string", "string"],
+                "artifact_ids_filter": ["string"],
                 "input": "input",
             },
         )
@@ -38,7 +38,7 @@ class TestTestCases:
         test_case = client.evaluation_datasets.test_cases.create(
             evaluation_dataset_id="evaluation_dataset_id",
             test_case_data={
-                "artifact_ids_filter": ["string", "string", "string"],
+                "artifact_ids_filter": ["string"],
                 "input": "input",
                 "expected_extra_info": {
                     "info": "info",
@@ -55,7 +55,7 @@ class TestTestCases:
         response = client.evaluation_datasets.test_cases.with_raw_response.create(
             evaluation_dataset_id="evaluation_dataset_id",
             test_case_data={
-                "artifact_ids_filter": ["string", "string", "string"],
+                "artifact_ids_filter": ["string"],
                 "input": "input",
             },
         )
@@ -70,7 +70,7 @@ class TestTestCases:
         with client.evaluation_datasets.test_cases.with_streaming_response.create(
             evaluation_dataset_id="evaluation_dataset_id",
             test_case_data={
-                "artifact_ids_filter": ["string", "string", "string"],
+                "artifact_ids_filter": ["string"],
                 "input": "input",
             },
         ) as response:
@@ -88,7 +88,7 @@ class TestTestCases:
             client.evaluation_datasets.test_cases.with_raw_response.create(
                 evaluation_dataset_id="",
                 test_case_data={
-                    "artifact_ids_filter": ["string", "string", "string"],
+                    "artifact_ids_filter": ["string"],
                     "input": "input",
                 },
             )
@@ -166,7 +166,7 @@ class TestTestCases:
             evaluation_dataset_id="evaluation_dataset_id",
             account_id="account_id",
             test_case_data={
-                "artifact_ids_filter": ["string", "string", "string"],
+                "artifact_ids_filter": ["string"],
                 "input": "input",
                 "expected_extra_info": {
                     "info": "info",
@@ -395,22 +395,10 @@ class TestTestCases:
             items=[
                 {
                     "test_case_data": {
-                        "artifact_ids_filter": ["string", "string", "string"],
+                        "artifact_ids_filter": ["string"],
                         "input": "input",
                     }
-                },
-                {
-                    "test_case_data": {
-                        "artifact_ids_filter": ["string", "string", "string"],
-                        "input": "input",
-                    }
-                },
-                {
-                    "test_case_data": {
-                        "artifact_ids_filter": ["string", "string", "string"],
-                        "input": "input",
-                    }
-                },
+                }
             ],
         )
         assert_matches_type(TestCaseBatchResponse, test_case, path=["response"])
@@ -422,7 +410,7 @@ class TestTestCases:
             items=[
                 {
                     "test_case_data": {
-                        "artifact_ids_filter": ["string", "string", "string"],
+                        "artifact_ids_filter": ["string"],
                         "input": "input",
                         "expected_extra_info": {
                             "info": "info",
@@ -431,31 +419,7 @@ class TestTestCases:
                         "expected_output": "expected_output",
                     },
                     "account_id": "account_id",
-                },
-                {
-                    "test_case_data": {
-                        "artifact_ids_filter": ["string", "string", "string"],
-                        "input": "input",
-                        "expected_extra_info": {
-                            "info": "info",
-                            "kind_schema": "STRING",
-                        },
-                        "expected_output": "expected_output",
-                    },
-                    "account_id": "account_id",
-                },
-                {
-                    "test_case_data": {
-                        "artifact_ids_filter": ["string", "string", "string"],
-                        "input": "input",
-                        "expected_extra_info": {
-                            "info": "info",
-                            "kind_schema": "STRING",
-                        },
-                        "expected_output": "expected_output",
-                    },
-                    "account_id": "account_id",
-                },
+                }
             ],
         )
         assert_matches_type(TestCaseBatchResponse, test_case, path=["response"])
@@ -467,22 +431,10 @@ class TestTestCases:
             items=[
                 {
                     "test_case_data": {
-                        "artifact_ids_filter": ["string", "string", "string"],
+                        "artifact_ids_filter": ["string"],
                         "input": "input",
                     }
-                },
-                {
-                    "test_case_data": {
-                        "artifact_ids_filter": ["string", "string", "string"],
-                        "input": "input",
-                    }
-                },
-                {
-                    "test_case_data": {
-                        "artifact_ids_filter": ["string", "string", "string"],
-                        "input": "input",
-                    }
-                },
+                }
             ],
         )
 
@@ -498,22 +450,10 @@ class TestTestCases:
             items=[
                 {
                     "test_case_data": {
-                        "artifact_ids_filter": ["string", "string", "string"],
+                        "artifact_ids_filter": ["string"],
                         "input": "input",
                     }
-                },
-                {
-                    "test_case_data": {
-                        "artifact_ids_filter": ["string", "string", "string"],
-                        "input": "input",
-                    }
-                },
-                {
-                    "test_case_data": {
-                        "artifact_ids_filter": ["string", "string", "string"],
-                        "input": "input",
-                    }
-                },
+                }
             ],
         ) as response:
             assert not response.is_closed
@@ -532,22 +472,10 @@ class TestTestCases:
                 items=[
                     {
                         "test_case_data": {
-                            "artifact_ids_filter": ["string", "string", "string"],
+                            "artifact_ids_filter": ["string"],
                             "input": "input",
                         }
-                    },
-                    {
-                        "test_case_data": {
-                            "artifact_ids_filter": ["string", "string", "string"],
-                            "input": "input",
-                        }
-                    },
-                    {
-                        "test_case_data": {
-                            "artifact_ids_filter": ["string", "string", "string"],
-                            "input": "input",
-                        }
-                    },
+                    }
                 ],
             )
 
@@ -560,7 +488,7 @@ class TestAsyncTestCases:
         test_case = await async_client.evaluation_datasets.test_cases.create(
             evaluation_dataset_id="evaluation_dataset_id",
             test_case_data={
-                "artifact_ids_filter": ["string", "string", "string"],
+                "artifact_ids_filter": ["string"],
                 "input": "input",
             },
         )
@@ -571,7 +499,7 @@ class TestAsyncTestCases:
         test_case = await async_client.evaluation_datasets.test_cases.create(
             evaluation_dataset_id="evaluation_dataset_id",
             test_case_data={
-                "artifact_ids_filter": ["string", "string", "string"],
+                "artifact_ids_filter": ["string"],
                 "input": "input",
                 "expected_extra_info": {
                     "info": "info",
@@ -588,7 +516,7 @@ class TestAsyncTestCases:
         response = await async_client.evaluation_datasets.test_cases.with_raw_response.create(
             evaluation_dataset_id="evaluation_dataset_id",
             test_case_data={
-                "artifact_ids_filter": ["string", "string", "string"],
+                "artifact_ids_filter": ["string"],
                 "input": "input",
             },
         )
@@ -603,7 +531,7 @@ class TestAsyncTestCases:
         async with async_client.evaluation_datasets.test_cases.with_streaming_response.create(
             evaluation_dataset_id="evaluation_dataset_id",
             test_case_data={
-                "artifact_ids_filter": ["string", "string", "string"],
+                "artifact_ids_filter": ["string"],
                 "input": "input",
             },
         ) as response:
@@ -621,7 +549,7 @@ class TestAsyncTestCases:
             await async_client.evaluation_datasets.test_cases.with_raw_response.create(
                 evaluation_dataset_id="",
                 test_case_data={
-                    "artifact_ids_filter": ["string", "string", "string"],
+                    "artifact_ids_filter": ["string"],
                     "input": "input",
                 },
             )
@@ -699,7 +627,7 @@ class TestAsyncTestCases:
             evaluation_dataset_id="evaluation_dataset_id",
             account_id="account_id",
             test_case_data={
-                "artifact_ids_filter": ["string", "string", "string"],
+                "artifact_ids_filter": ["string"],
                 "input": "input",
                 "expected_extra_info": {
                     "info": "info",
@@ -928,22 +856,10 @@ class TestAsyncTestCases:
             items=[
                 {
                     "test_case_data": {
-                        "artifact_ids_filter": ["string", "string", "string"],
+                        "artifact_ids_filter": ["string"],
                         "input": "input",
                     }
-                },
-                {
-                    "test_case_data": {
-                        "artifact_ids_filter": ["string", "string", "string"],
-                        "input": "input",
-                    }
-                },
-                {
-                    "test_case_data": {
-                        "artifact_ids_filter": ["string", "string", "string"],
-                        "input": "input",
-                    }
-                },
+                }
             ],
         )
         assert_matches_type(TestCaseBatchResponse, test_case, path=["response"])
@@ -955,7 +871,7 @@ class TestAsyncTestCases:
             items=[
                 {
                     "test_case_data": {
-                        "artifact_ids_filter": ["string", "string", "string"],
+                        "artifact_ids_filter": ["string"],
                         "input": "input",
                         "expected_extra_info": {
                             "info": "info",
@@ -964,31 +880,7 @@ class TestAsyncTestCases:
                         "expected_output": "expected_output",
                     },
                     "account_id": "account_id",
-                },
-                {
-                    "test_case_data": {
-                        "artifact_ids_filter": ["string", "string", "string"],
-                        "input": "input",
-                        "expected_extra_info": {
-                            "info": "info",
-                            "kind_schema": "STRING",
-                        },
-                        "expected_output": "expected_output",
-                    },
-                    "account_id": "account_id",
-                },
-                {
-                    "test_case_data": {
-                        "artifact_ids_filter": ["string", "string", "string"],
-                        "input": "input",
-                        "expected_extra_info": {
-                            "info": "info",
-                            "kind_schema": "STRING",
-                        },
-                        "expected_output": "expected_output",
-                    },
-                    "account_id": "account_id",
-                },
+                }
             ],
         )
         assert_matches_type(TestCaseBatchResponse, test_case, path=["response"])
@@ -1000,22 +892,10 @@ class TestAsyncTestCases:
             items=[
                 {
                     "test_case_data": {
-                        "artifact_ids_filter": ["string", "string", "string"],
+                        "artifact_ids_filter": ["string"],
                         "input": "input",
                     }
-                },
-                {
-                    "test_case_data": {
-                        "artifact_ids_filter": ["string", "string", "string"],
-                        "input": "input",
-                    }
-                },
-                {
-                    "test_case_data": {
-                        "artifact_ids_filter": ["string", "string", "string"],
-                        "input": "input",
-                    }
-                },
+                }
             ],
         )
 
@@ -1031,22 +911,10 @@ class TestAsyncTestCases:
             items=[
                 {
                     "test_case_data": {
-                        "artifact_ids_filter": ["string", "string", "string"],
+                        "artifact_ids_filter": ["string"],
                         "input": "input",
                     }
-                },
-                {
-                    "test_case_data": {
-                        "artifact_ids_filter": ["string", "string", "string"],
-                        "input": "input",
-                    }
-                },
-                {
-                    "test_case_data": {
-                        "artifact_ids_filter": ["string", "string", "string"],
-                        "input": "input",
-                    }
-                },
+                }
             ],
         ) as response:
             assert not response.is_closed
@@ -1065,21 +933,9 @@ class TestAsyncTestCases:
                 items=[
                     {
                         "test_case_data": {
-                            "artifact_ids_filter": ["string", "string", "string"],
+                            "artifact_ids_filter": ["string"],
                             "input": "input",
                         }
-                    },
-                    {
-                        "test_case_data": {
-                            "artifact_ids_filter": ["string", "string", "string"],
-                            "input": "input",
-                        }
-                    },
-                    {
-                        "test_case_data": {
-                            "artifact_ids_filter": ["string", "string", "string"],
-                            "input": "input",
-                        }
-                    },
+                    }
                 ],
             )
