@@ -2,7 +2,7 @@
 
 [![PyPI version](https://img.shields.io/pypi/v/scale_workshop.svg)](https://pypi.org/project/scale_workshop/)
 
-The Scale Workshop Python library provides convenient access to the Scale Workshop REST API from any Python 3.7+
+The Scale Workshop Python library provides convenient access to the Scale Workshop REST API from any Python 3.8+
 application. The library includes type definitions for all request params and response fields,
 and offers both synchronous and asynchronous clients powered by [httpx](https://github.com/encode/httpx).
 
@@ -31,8 +31,7 @@ import os
 from scale_workshop import ScaleWorkshop
 
 client = ScaleWorkshop(
-    # This is the default and can be omitted
-    api_key=os.environ.get("AWESOME_COMPANY_API_KEY"),
+    api_key=os.environ.get("AWESOME_COMPANY_API_KEY"),  # This is the default and can be omitted
 )
 
 page = client.evaluation_datasets.list()
@@ -54,8 +53,7 @@ import asyncio
 from scale_workshop import AsyncScaleWorkshop
 
 client = AsyncScaleWorkshop(
-    # This is the default and can be omitted
-    api_key=os.environ.get("AWESOME_COMPANY_API_KEY"),
+    api_key=os.environ.get("AWESOME_COMPANY_API_KEY"),  # This is the default and can be omitted
 )
 
 
@@ -236,11 +234,13 @@ Note that requests that time out are [retried twice by default](#retries).
 
 We use the standard library [`logging`](https://docs.python.org/3/library/logging.html) module.
 
-You can enable logging by setting the environment variable `SCALE_WORKSHOP_LOG` to `debug`.
+You can enable logging by setting the environment variable `SCALE_WORKSHOP_LOG` to `info`.
 
 ```shell
-$ export SCALE_WORKSHOP_LOG=debug
+$ export SCALE_WORKSHOP_LOG=info
 ```
+
+Or to `debug` for more verbose logging.
 
 ### How to tell whether `None` means `null` or missing
 
@@ -380,7 +380,7 @@ print(scale_workshop.__version__)
 
 ## Requirements
 
-Python 3.7 or higher.
+Python 3.8 or higher.
 
 ## Contributing
 

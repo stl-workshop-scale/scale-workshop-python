@@ -1,5 +1,26 @@
 # Changelog
 
+## 1.4.1 (2024-11-28)
+
+Full Changelog: [v1.4.0...v1.4.1](https://github.com/stl-workshop-scale/scale-workshop-python/compare/v1.4.0...v1.4.1)
+
+### Bug Fixes
+
+* **client:** compat with new httpx 0.28.0 release ([#31](https://github.com/stl-workshop-scale/scale-workshop-python/issues/31)) ([9d2038a](https://github.com/stl-workshop-scale/scale-workshop-python/commit/9d2038a054c71ff270c91130cbf8fdf03c8952c6))
+
+
+### Chores
+
+* **internal:** codegen related update ([#29](https://github.com/stl-workshop-scale/scale-workshop-python/issues/29)) ([3913f72](https://github.com/stl-workshop-scale/scale-workshop-python/commit/3913f72f52c7bf825ae5df1c04701260e9a4f070))
+* **internal:** exclude mypy from running on tests ([#30](https://github.com/stl-workshop-scale/scale-workshop-python/issues/30)) ([3270cdd](https://github.com/stl-workshop-scale/scale-workshop-python/commit/3270cdd393f581ecc81da12b4c9ac228ebfbc89b))
+* **internal:** fix compat model_dump method when warnings are passed ([#28](https://github.com/stl-workshop-scale/scale-workshop-python/issues/28)) ([6da7d15](https://github.com/stl-workshop-scale/scale-workshop-python/commit/6da7d159d9b2d116eab2550105b7cd3a664df7a5))
+* rebuild project due to codegen change ([#21](https://github.com/stl-workshop-scale/scale-workshop-python/issues/21)) ([49c17ce](https://github.com/stl-workshop-scale/scale-workshop-python/commit/49c17cea3592dcc8df7eb2d7ae706f6cebe21ef3))
+* rebuild project due to codegen change ([#23](https://github.com/stl-workshop-scale/scale-workshop-python/issues/23)) ([f90baa0](https://github.com/stl-workshop-scale/scale-workshop-python/commit/f90baa072a0617b7ae0f80ab8c79326ae1418bdc))
+* rebuild project due to codegen change ([#24](https://github.com/stl-workshop-scale/scale-workshop-python/issues/24)) ([62cf868](https://github.com/stl-workshop-scale/scale-workshop-python/commit/62cf868d86c418b503f5dd5cdff7995449f269a9))
+* rebuild project due to codegen change ([#25](https://github.com/stl-workshop-scale/scale-workshop-python/issues/25)) ([c3bcbbb](https://github.com/stl-workshop-scale/scale-workshop-python/commit/c3bcbbb549ae1f237f7c9984fd5c47581efed000))
+* rebuild project due to codegen change ([#26](https://github.com/stl-workshop-scale/scale-workshop-python/issues/26)) ([f130a25](https://github.com/stl-workshop-scale/scale-workshop-python/commit/f130a256d8ed23d9ce3f2b536a95d151e62b6cf0))
+* rebuild project due to codegen change ([#27](https://github.com/stl-workshop-scale/scale-workshop-python/issues/27)) ([c95c81f](https://github.com/stl-workshop-scale/scale-workshop-python/commit/c95c81f8ecee9ec25119f1b1cfb660cbc35f6726))
+
 ## 1.4.0 (2024-10-31)
 
 Full Changelog: [v1.3.0...v1.4.0](https://github.com/stl-workshop-scale/scale-workshop-python/compare/v1.3.0...v1.4.0)
